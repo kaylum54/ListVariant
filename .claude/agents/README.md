@@ -4,7 +4,7 @@ A complete set of specialist agent skills that work together as a virtual softwa
 
 ## Overview
 
-This collection provides 8 specialist agents that cover the full software development lifecycle:
+This collection provides 9 specialist agents that cover the full software development lifecycle:
 
 ```
                     ┌─────────────────┐
@@ -22,8 +22,8 @@ This collection provides 8 specialist agents that cover the full software develo
         │                    
         ▼                    
 ┌───────────────┐  ┌─────────────────┐  ┌─────────────────────┐
-│ STRUCTURE     │  │ CODEBASE        │  │                     │
-│ AGENT         │  │ REVIEWER        │  │                     │
+│ STRUCTURE     │  │ CODEBASE        │  │ PROJECT             │
+│ AGENT         │  │ REVIEWER        │  │ SUMMARIZER          │
 └───────────────┘  └─────────────────┘  └─────────────────────┘
 ```
 
@@ -39,6 +39,7 @@ This collection provides 8 specialist agents that cover the full software develo
 | **Codebase Reviewer** | Quality Gate | Code review, standards enforcement, bug detection |
 | **Security Agent** | Security Authority | Vulnerabilities, auth flows, security audits |
 | **SEO & Marketing Agent** | Visibility | Landing pages, SEO, conversion optimization |
+| **Project Summarizer** | Context Keeper | Project snapshots, state capture, context continuity |
 
 ## Installation
 
@@ -70,7 +71,10 @@ your-project/
 │   ├── security-agent/
 │   │   ├── SKILL.md
 │   │   └── references/
-│   └── seo-marketing-agent/
+│   ├── seo-marketing-agent/
+│   │   ├── SKILL.md
+│   │   └── references/
+│   └── project-summarizer/
 │       ├── SKILL.md
 │       └── references/
 └── [your project files]
@@ -181,6 +185,7 @@ Each skill includes:
 | Codebase Reviewer | review-checklist.md, common-issues.md |
 | Security Agent | security-checklist.md, owasp-top-10.md |
 | SEO & Marketing Agent | seo-checklist.md, copywriting-guide.md |
+| Project Summarizer | quick-status-template.md, summary-examples.md |
 
 ## Customization
 
@@ -216,6 +221,9 @@ Use the same structure to create additional specialists:
 | Security concerns | Security Agent |
 | Writing docs | Documentation Agent |
 | Optimizing landing page | SEO & Marketing Agent |
+| Creating project snapshot | Project Summarizer |
+| Starting new conversation | Project Summarizer |
+| Before major changes | Project Summarizer |
 
 ### Escalation Paths
 
@@ -233,6 +241,6 @@ These skills are provided for your use. Customize freely.
 
 ---
 
-**Version:** 1.0  
+**Version:** 1.1  
 **Last Updated:** January 2025  
-**Skills Count:** 8 agents, 16 reference documents
+**Skills Count:** 9 agents, 18 reference documents
