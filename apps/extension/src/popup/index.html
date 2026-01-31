@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tom Flips</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; width: 320px; min-height: 400px; background: #f9fafb; }
+      .header { background: #2563eb; color: white; padding: 16px; display: flex; align-items: center; gap: 8px; }
+      .header h1 { font-size: 18px; font-weight: 700; }
+      .logo { width: 28px; height: 28px; background: rgba(255,255,255,0.2); border-radius: 6px; }
+      .content { padding: 16px; }
+      .status { padding: 12px; border-radius: 8px; margin-bottom: 16px; font-size: 14px; }
+      .status.connected { background: #ecfdf5; color: #065f46; }
+      .status.disconnected { background: #fef2f2; color: #991b1b; }
+      .btn { display: block; width: 100%; padding: 10px; border: none; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; margin-bottom: 8px; }
+      .btn-primary { background: #2563eb; color: white; }
+      .btn-primary:hover { background: #1d4ed8; }
+      .btn-outline { background: white; color: #374151; border: 1px solid #d1d5db; }
+      .btn-outline:hover { background: #f9fafb; }
+      .section { margin-bottom: 16px; }
+      .section-title { font-size: 13px; font-weight: 600; color: #6b7280; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+      .select { display: block; width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; background: white; color: #374151; cursor: pointer; margin-bottom: 8px; }
+      .select:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 2px rgba(37,99,235,0.2); }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="logo"></div>
+      <h1>Tom Flips</h1>
+    </div>
+    <div class="content">
+      <div id="auth-status" class="status disconnected">
+        Checking connection...
+      </div>
+
+      <div id="auth-section">
+        <div class="section">
+          <div class="section-title">Account</div>
+          <button id="login-btn" class="btn btn-primary">Sign In</button>
+        </div>
+      </div>
+
+      <div id="connected-section" style="display: none;">
+        <div class="section">
+          <div class="section-title">Quick Actions</div>
+          <button id="open-dashboard" class="btn btn-primary">Open Dashboard</button>
+          <button id="open-listings" class="btn btn-outline">My Listings</button>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Select Listing</div>
+          <select id="listing-select" class="select">
+            <option value="">Loading listings...</option>
+          </select>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Cross-list to</div>
+          <button id="list-facebook" class="btn btn-outline" disabled>List on Facebook</button>
+          <button id="list-gumtree" class="btn btn-outline" disabled>List on Gumtree</button>
+        </div>
+
+        <div id="listing-status" class="status" style="display: none;"></div>
+
+        <div class="section">
+          <button id="logout-btn" class="btn btn-outline">Sign Out</button>
+        </div>
+      </div>
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>

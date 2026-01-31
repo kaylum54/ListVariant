@@ -1,0 +1,208 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  passwordHash  String    @map("password_hash")
+  name          String?
+  discordId     String?   @unique @map("discord_id")
+  subscriptionTier String  @default("free") @map("subscription_tier")
+
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  listings              Listing[]
+  marketplaceConnections MarketplaceConnection[]
+  sales                 Sale[]
+
+  @@map("users")
+}
+
+model MarketplaceConnection {
+  id          String   @id @default(cuid())
+  userId      String   @map("user_id")
+  marketplace String   // 'ebay', 'facebook', 'gumtree', 'etsy', 'vinted', 'depop', 'poshmark'
+  status      String   @default("pending") // 'pending', 'connected', 'error'
+
+  // Generic OAuth tokens (used by eBay, Etsy, etc.)
+  accessToken     String?   @map("access_token")
+  refreshToken    String?   @map("refresh_token")
+  tokenExpiresAt  DateTime? @map("token_expires_at")
+  platformConfig  Json?     @map("platform_config")
+
+  lastSyncAt  DateTime? @map("last_sync_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, marketplace])
+  @@map("marketplace_connections")
+}
+
+model OAuthState {
+  id            String   @id @default(cuid())
+  state         String   @unique
+  codeVerifier  String   @map("code_verifier")
+  userId        String   @map("user_id")
+  platform      String
+  expiresAt     DateTime @map("expires_at")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@index([state])
+  @@index([userId, platform])
+  @@index([expiresAt])
+  @@map("oauth_states")
+}
+
+model Listing {
+  id          String  @id @default(cuid())
+  userId      String  @map("user_id")
+
+  // Product Info
+  title       String
+  description String?
+  price       Decimal @db.Decimal(10, 2)
+  condition   String? // 'new', 'used_like_new', 'used_good', 'used_fair'
+
+  // Furniture specific
+  brand               String?
+  material            String?
+  color               String?
+  dimensionsLengthCm  Int?    @map("dimensions_length_cm")
+  dimensionsWidthCm   Int?    @map("dimensions_width_cm")
+  dimensionsHeightCm  Int?    @map("dimensions_height_cm")
+
+  // Source
+  sourceType       String?  @map("source_type") // 'manual', 'wholesale_catalog'
+  wholesaleItemId  String?  @map("wholesale_item_id")
+
+  // Internal
+  sku       String?
+  costPrice Decimal? @db.Decimal(10, 2) @map("cost_price")
+  notes     String?
+
+  status    String   @default("draft") // 'draft', 'active', 'sold', 'archived'
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user                User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  wholesaleItem       WholesaleItem?      @relation(fields: [wholesaleItemId], references: [id])
+  images              ListingImage[]
+  marketplaceListings MarketplaceListing[]
+  sales               Sale[]
+
+  @@index([userId, status])
+  @@index([userId, createdAt])
+  @@map("listings")
+}
+
+model ListingImage {
+  id        String   @id @default(cuid())
+  listingId String   @map("listing_id")
+  url       String
+  position  Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@index([listingId])
+  @@map("listing_images")
+}
+
+model MarketplaceListing {
+  id          String  @id @default(cuid())
+  listingId   String  @map("listing_id")
+  marketplace String  // 'ebay', 'facebook', 'gumtree', 'etsy', 'vinted', 'depop', 'poshmark'
+
+  // External IDs
+  externalId  String? @map("external_id")
+  externalUrl String? @map("external_url")
+
+  // Status
+  status       String  @default("pending") // 'pending', 'active', 'sold', 'ended', 'error'
+  errorMessage String? @map("error_message")
+
+  // Platform-specific data
+  platformData Json?   @map("platform_data")
+
+  listedAt  DateTime? @map("listed_at")
+  endedAt   DateTime? @map("ended_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  sales   Sale[]
+
+  @@unique([listingId, marketplace])
+  @@index([marketplace, status])
+  @@index([externalId])
+  @@map("marketplace_listings")
+}
+
+model WholesaleItem {
+  id          String  @id @default(cuid())
+
+  // Product Info
+  name        String
+  description String?
+  category    String?
+  subcategory String?
+
+  // Pricing
+  wholesalePrice          Decimal  @db.Decimal(10, 2) @map("wholesale_price")
+  recommendedRetailPrice  Decimal? @db.Decimal(10, 2) @map("recommended_retail_price")
+
+  // Details
+  brand               String?
+  material            String?
+  colors              Json?    // Available colors
+  dimensionsLengthCm  Int?     @map("dimensions_length_cm")
+  dimensionsWidthCm   Int?     @map("dimensions_width_cm")
+  dimensionsHeightCm  Int?     @map("dimensions_height_cm")
+
+  // Images
+  images Json? // Array of image URLs
+
+  // Stock
+  stockQuantity Int     @default(0) @map("stock_quantity")
+  isAvailable   Boolean @default(true) @map("is_available")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  listings Listing[]
+
+  @@index([category, isAvailable])
+  @@map("wholesale_items")
+}
+
+model Sale {
+  id                   String  @id @default(cuid())
+  listingId            String? @map("listing_id")
+  marketplaceListingId String? @map("marketplace_listing_id")
+  userId               String  @map("user_id")
+
+  salePrice    Decimal  @db.Decimal(10, 2) @map("sale_price")
+  platformFees Decimal  @default(0) @db.Decimal(10, 2) @map("platform_fees")
+  profit       Decimal? @db.Decimal(10, 2)
+
+  soldAt    DateTime @default(now()) @map("sold_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  listing            Listing?            @relation(fields: [listingId], references: [id])
+  marketplaceListing MarketplaceListing? @relation(fields: [marketplaceListingId], references: [id])
+  user               User                @relation(fields: [userId], references: [id])
+
+  @@index([userId, soldAt])
+  @@index([listingId])
+  @@index([marketplaceListingId])
+  @@map("sales")
+}

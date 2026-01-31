@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* PRIMARY - Trust & Professionalism */
+    --color-primary-50: #EEF4FF;
+    --color-primary-500: #6172F3;
+    --color-primary-600: #444CE7;
+    --color-primary-700: #3538CD;
+
+    /* SECONDARY - Growth & Success */
+    --color-secondary-500: #10B981;
+
+    /* ACCENT - Energy & Urgency */
+    --color-accent-500: #F59E0B;
+
+    /* SEMANTIC */
+    --color-success: var(--color-secondary-500);
+    --color-warning: var(--color-accent-500);
+    --color-error: #EF4444;
+
+    /* BACKGROUNDS */
+    --bg-primary: #FFFFFF;
+    --bg-secondary: #FAFAFA;
+
+    /* TEXT */
+    --text-primary: #1C1917;
+    --text-secondary: #57534E;
+
+    /* SHADOWS */
+    --shadow-glow-primary: 0 0 40px -10px #6172F3;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-lg shadow-primary-500/20;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 bg-white hover:bg-neutral-50 text-neutral-700 px-6 py-3 rounded-xl font-semibold border-2 border-neutral-200 transition-all;
+  }
+
+  .card {
+    @apply bg-white rounded-2xl border border-neutral-200 shadow-sm hover:shadow-lg transition-shadow;
+  }
+}
