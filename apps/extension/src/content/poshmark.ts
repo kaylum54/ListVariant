@@ -65,6 +65,13 @@ class PoshmarkAutomation extends AutomationFramework {
   protected readonly platform = 'poshmark';
   protected readonly createPageUrl = 'https://poshmark.co.uk/create-listing';
 
+  protected async verifyLoggedIn(): Promise<void> {
+    const avatar = document.querySelector('[data-testid="user-avatar"], [class*="Avatar"], [class*="avatar"], .user-menu, nav [href*="/closet"]');
+    if (!avatar) {
+      this.log('No avatar/profile link found — may not be logged in');
+    }
+  }
+
   protected async uploadImages(images: Array<{ url: string; dataUrl?: string }>): Promise<void> {
     if (!images.length) return;
 

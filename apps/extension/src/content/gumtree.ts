@@ -47,19 +47,16 @@ async function createListing(listing: any) {
     );
     await delay(randomDelay(500, 1000));
 
-    await clickSubmit();
-    await delay(3000);
-
-    const success = await checkSuccess();
+    console.log('[TomFlips:gumtree] All fields filled. Review and publish manually.');
 
     chrome.runtime.sendMessage({
       type: 'REPORT_LISTING_STATUS',
       listingId: listing.id,
       marketplace: 'gumtree',
-      status: { success },
+      status: { success: true },
     });
 
-    return { success };
+    return { success: true };
   } catch (error: any) {
     chrome.runtime.sendMessage({
       type: 'REPORT_LISTING_STATUS',
@@ -100,7 +97,7 @@ async function selectCategory(_listing: any) {
   }
 }
 
-async function uploadImages(images: Array<{ url: string }>) {
+async function uploadImages(images: Array<{ url: string; dataUrl?: string }>) {
   const fileInput = (await waitForElement(
     'input[type="file"]',
     5000
@@ -108,43 +105,36 @@ async function uploadImages(images: Array<{ url: string }>) {
   if (!fileInput) throw new Error('Could not find image upload input');
 
   for (const image of images.slice(0, 10)) {
-    const response = await fetch(image.url);
-    const blob = await response.blob();
-    const file = new File([blob], 'image.jpg', { type: 'image/jpeg' });
+    try {
+      let blob: Blob;
+      if (image.dataUrl) {
+        // Use pre-fetched data URL from background (avoids CORS)
+        const response = await fetch(image.dataUrl);
+        blob = await response.blob();
+      } else {
+        // Fallback: direct fetch
+        const response = await fetch(image.url);
+        if (!response.ok) {
+          console.warn('[TomFlips:gumtree] Failed to fetch image:', image.url);
+          continue;
+        }
+        blob = await response.blob();
+      }
 
-    const dataTransfer = new DataTransfer();
-    dataTransfer.items.add(file);
-    fileInput.files = dataTransfer.files;
-    fileInput.dispatchEvent(new Event('change', { bubbles: true }));
+      const file = new File([blob], 'image.jpg', { type: 'image/jpeg' });
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(file);
+      fileInput.files = dataTransfer.files;
+      fileInput.dispatchEvent(new Event('change', { bubbles: true }));
 
-    await delay(1500);
-  }
-}
-
-async function clickSubmit() {
-  const buttons = document.querySelectorAll(
-    'button[type="submit"], button'
-  );
-  for (const button of buttons) {
-    if (
-      button.textContent?.includes('Post My Ad') ||
-      button.classList.contains('post-ad-button')
-    ) {
-      (button as HTMLElement).click();
-      return;
+      await delay(1500);
+    } catch (err) {
+      console.warn('[TomFlips:gumtree] Error uploading image:', err);
+      continue;
     }
   }
-  throw new Error('Could not find submit button');
 }
 
-async function checkSuccess(): Promise<boolean> {
-  await delay(3000);
-  return (
-    window.location.href.includes('/manage-ads') ||
-    document.body.innerText.includes('Your ad is live') ||
-    document.body.innerText.includes('successfully posted')
-  );
-}
 
 function buildDescription(listing: any): string {
   let desc = listing.description || listing.title;

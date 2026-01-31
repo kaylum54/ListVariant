@@ -42,6 +42,13 @@ class DepopAutomation extends AutomationFramework {
   protected readonly platform = 'depop';
   protected readonly createPageUrl = 'https://www.depop.com/products/create';
 
+  protected async verifyLoggedIn(): Promise<void> {
+    const avatar = document.querySelector('[data-testid="user-avatar"], [class*="Avatar"], [class*="avatar"], nav [href*="/profile"]');
+    if (!avatar) {
+      this.log('No avatar/profile link found — may not be logged in');
+    }
+  }
+
   protected async uploadImages(images: Array<{ url: string; dataUrl?: string }>): Promise<void> {
     const fileInput = await this.waitForAnySelector(SELECTORS.fileInput) as HTMLInputElement | null;
     if (!fileInput) {
