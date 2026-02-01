@@ -300,25 +300,25 @@ class PoshmarkAutomation extends AutomationFramework {
 // --- Initialize & Message listener ---
 const automation = new PoshmarkAutomation();
 
-console.log('[TomFlips:poshmark] Content script loaded on:', window.location.href);
+console.log('[SyncSellr:poshmark] Content script loaded on:', window.location.href);
 
 // Initialize the selector registry asynchronously
 automation.initRegistry().then((reg) => {
-  console.log(`[TomFlips:poshmark] SelectorRegistry ready v${reg.getVersion()}`);
+  console.log(`[SyncSellr:poshmark] SelectorRegistry ready v${reg.getVersion()}`);
 }).catch((err) => {
-  console.warn('[TomFlips:poshmark] SelectorRegistry init failed, using bundled defaults:', err);
+  console.warn('[SyncSellr:poshmark] SelectorRegistry init failed, using bundled defaults:', err);
 });
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
-  console.log('[TomFlips:poshmark] Message received:', message.type);
+  console.log('[SyncSellr:poshmark] Message received:', message.type);
   if (message.type === 'CREATE_LISTING' && (!message.platform || message.platform === 'poshmark')) {
     automation.createListing(message.listing)
       .then((result) => {
-        console.log('[TomFlips:poshmark] createListing result:', result);
+        console.log('[SyncSellr:poshmark] createListing result:', result);
         sendResponse(result);
       })
       .catch((error) => {
-        console.error('[TomFlips:poshmark] createListing error:', error);
+        console.error('[SyncSellr:poshmark] createListing error:', error);
         sendResponse({ success: false, error: error?.message || String(error) });
       });
     return true;

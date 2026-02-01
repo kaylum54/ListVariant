@@ -1,38 +1,31 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Camera, MousePointerClick, Rocket } from 'lucide-react';
 
 const steps = [
   {
     step: '1',
     title: 'Create Your Listing',
     description:
-      'Add photos, details, and pricing for your furniture item in one place.',
-    icon: Camera,
-    color: 'bg-primary-100 text-primary-600',
+      'Add your photos, title, description, and price once in the SyncSellr dashboard.',
   },
   {
     step: '2',
-    title: 'Choose Platforms',
+    title: 'Select Marketplaces',
     description:
-      'Select which marketplaces to publish to \u2014 eBay, Facebook, Gumtree, or all three.',
-    icon: MousePointerClick,
-    color: 'bg-secondary-100 text-secondary-600',
+      'Choose which platforms to publish to. Pick all 7 or just the ones you want.',
   },
   {
     step: '3',
-    title: 'Publish & Manage',
+    title: 'Publish Everywhere',
     description:
-      'One click publishes everywhere. Track status and manage from your dashboard.',
-    icon: Rocket,
-    color: 'bg-accent-100 text-accent-600',
+      'Hit publish and SyncSellr sends your listing to every selected marketplace in seconds.',
   },
 ];
 
 export const HowItWorks = () => {
   return (
-    <section id="how-it-works" className="py-24 px-4" aria-labelledby="how-it-works-heading">
+    <section id="how-it-works" className="py-20 md:py-28 px-4" aria-labelledby="how-it-works-heading">
       <div className="max-w-7xl mx-auto">
         <motion.div
           className="text-center mb-16"
@@ -40,17 +33,14 @@ export const HowItWorks = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h2 id="how-it-works-heading" className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
+          <h2 id="how-it-works-heading" className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             How It Works
           </h2>
-          <p className="text-neutral-600 max-w-xl mx-auto text-lg">
-            Start cross-listing your furniture in under 2 minutes
-          </p>
         </motion.div>
 
         <div className="grid md:grid-cols-3 gap-8 relative">
           {/* Connecting line (desktop only) */}
-          <div className="hidden md:block absolute top-20 left-[20%] right-[20%] h-0.5 bg-gradient-to-r from-primary-200 via-secondary-200 to-accent-200" />
+          <div className="hidden md:block absolute top-10 left-[20%] right-[20%] h-0.5 bg-gray-200" />
 
           {steps.map((item, i) => (
             <motion.div
@@ -61,23 +51,17 @@ export const HowItWorks = () => {
               viewport={{ once: true }}
               transition={{ delay: i * 0.15 }}
             >
-              {/* Step icon */}
+              {/* Step number circle */}
               <div className="relative inline-flex mb-6">
-                <div
-                  className={`w-16 h-16 rounded-2xl flex items-center justify-center ${item.color} relative z-10`}
-                >
-                  <item.icon className="w-7 h-7" />
-                </div>
-                {/* Step number badge */}
-                <div className="absolute -top-2 -right-2 w-7 h-7 bg-white border-2 border-neutral-200 rounded-full flex items-center justify-center text-xs font-bold text-neutral-700 z-20">
+                <div className="w-14 h-14 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xl font-bold relative z-10">
                   {item.step}
                 </div>
               </div>
 
-              <h3 className="text-xl font-semibold text-neutral-900 mb-2">
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
                 {item.title}
               </h3>
-              <p className="text-neutral-600 max-w-xs mx-auto">
+              <p className="text-gray-500 max-w-xs mx-auto leading-relaxed">
                 {item.description}
               </p>
             </motion.div>

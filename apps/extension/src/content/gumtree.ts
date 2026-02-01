@@ -66,7 +66,7 @@ async function waitForAnySelector(selectors: string[], timeout = 5000): Promise<
   for (let i = 0; i < selectors.length; i++) {
     const el = document.querySelector(selectors[i]);
     if (el) {
-      console.log(`[TomFlips:gumtree] Selector matched [${i}]: ${selectors[i]}`);
+      console.log(`[SyncSellr:gumtree] Selector matched [${i}]: ${selectors[i]}`);
       return el;
     }
   }
@@ -76,7 +76,7 @@ async function waitForAnySelector(selectors: string[], timeout = 5000): Promise<
     for (let i = 0; i < selectors.length; i++) {
       const el = document.querySelector(selectors[i]);
       if (el) {
-        console.log(`[TomFlips:gumtree] Selector matched [${i}]: ${selectors[i]}`);
+        console.log(`[SyncSellr:gumtree] Selector matched [${i}]: ${selectors[i]}`);
         return el;
       }
     }
@@ -88,9 +88,9 @@ async function waitForAnySelector(selectors: string[], timeout = 5000): Promise<
 // Initialize the selector registry
 SelectorRegistry.init().then((reg) => {
   registry = reg;
-  console.log(`[TomFlips:gumtree] SelectorRegistry ready v${reg.getVersion()}`);
+  console.log(`[SyncSellr:gumtree] SelectorRegistry ready v${reg.getVersion()}`);
 }).catch((err) => {
-  console.warn('[TomFlips:gumtree] SelectorRegistry init failed, using bundled defaults:', err);
+  console.warn('[SyncSellr:gumtree] SelectorRegistry init failed, using bundled defaults:', err);
 });
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -147,7 +147,7 @@ async function createListing(listing: any) {
     );
     await delay(randomDelay(500, 1000));
 
-    console.log('[TomFlips:gumtree] All fields filled. Review and publish manually.');
+    console.log('[SyncSellr:gumtree] All fields filled. Review and publish manually.');
 
     chrome.runtime.sendMessage({
       type: 'REPORT_LISTING_STATUS',
@@ -212,7 +212,7 @@ async function uploadImages(images: Array<{ url: string; dataUrl?: string }>) {
         // Fallback: direct fetch
         const response = await fetch(image.url);
         if (!response.ok) {
-          console.warn('[TomFlips:gumtree] Failed to fetch image:', image.url);
+          console.warn('[SyncSellr:gumtree] Failed to fetch image:', image.url);
           continue;
         }
         blob = await response.blob();
@@ -226,7 +226,7 @@ async function uploadImages(images: Array<{ url: string; dataUrl?: string }>) {
 
       await delay(1500);
     } catch (err) {
-      console.warn('[TomFlips:gumtree] Error uploading image:', err);
+      console.warn('[SyncSellr:gumtree] Error uploading image:', err);
       continue;
     }
   }

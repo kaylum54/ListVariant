@@ -1,61 +1,62 @@
-import { Plus_Jakarta_Sans } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import { Providers } from '@/components/providers';
 import '@/styles/globals.css';
 import type { Metadata } from 'next';
 
-const plusJakarta = Plus_Jakarta_Sans({
+const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-heading',
+  variable: '--font-inter',
   display: 'swap',
-  weight: ['400', '500', '600', '700', '800'],
+  weight: ['400', '500', '600', '700'],
 });
 
 export const metadata: Metadata = {
   title: {
-    default: 'Tom Flips — Cross-List Furniture to eBay, Facebook & Gumtree in One Click',
-    template: '%s | Tom Flips',
+    default: 'SyncSellr — Cross-List to 7 UK Marketplaces in One Click',
+    template: '%s | SyncSellr',
   },
   description:
-    'Stop manually listing furniture on every marketplace. Tom Flips lets UK resellers cross-list to eBay, Facebook Marketplace, and Gumtree in seconds. Free plan available.',
+    'List once, sell everywhere. SyncSellr lets UK resellers cross-list to eBay, Facebook, Gumtree, Etsy, Vinted, Depop, and Poshmark from one dashboard.',
   keywords: [
-    'furniture reselling',
-    'cross-listing tool',
-    'eBay listing tool',
-    'Facebook Marketplace',
-    'Gumtree',
-    'furniture flipping UK',
-    'reseller tools',
-    'multi-platform listing',
-    'furniture cross-list',
+    'cross-listing tool UK',
+    'multi-marketplace listing',
+    'sell on multiple marketplaces',
+    'eBay cross-listing',
+    'Gumtree listing tool',
+    'UK reseller software',
+    'Vinted cross-list',
+    'Depop listing tool',
+    'marketplace automation UK',
+    'cross-listing platform',
   ],
-  authors: [{ name: 'Tom Flips' }],
-  creator: 'Tom Flips',
-  metadataBase: new URL('https://tomflips.co.uk'),
+  authors: [{ name: 'SyncSellr' }],
+  creator: 'SyncSellr',
+  metadataBase: new URL('https://syncsellr.com'),
   alternates: {
     canonical: '/',
   },
   openGraph: {
     type: 'website',
     locale: 'en_GB',
-    url: 'https://tomflips.co.uk',
-    siteName: 'Tom Flips',
-    title: 'Tom Flips — Cross-List Furniture to eBay, Facebook & Gumtree in One Click',
+    url: 'https://syncsellr.com',
+    siteName: 'SyncSellr',
+    title: 'SyncSellr — Cross-List to 7 UK Marketplaces Instantly',
     description:
-      'Stop manually listing furniture on every marketplace. Tom Flips lets UK resellers cross-list to eBay, Facebook Marketplace, and Gumtree in seconds.',
+      'Stop copy-pasting listings. SyncSellr publishes your items to eBay, Facebook, Gumtree, Etsy, Vinted, Depop, and Poshmark with one click.',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Tom Flips — List once, sell everywhere. Cross-listing platform for UK furniture resellers.',
+        alt: 'SyncSellr — List once, sell everywhere. Cross-listing platform for UK resellers.',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Tom Flips — Cross-List Furniture to eBay, Facebook & Gumtree',
+    title: 'SyncSellr — Cross-List to 7 UK Marketplaces Instantly',
     description:
-      'Stop manually listing furniture on every marketplace. Cross-list to eBay, Facebook Marketplace, and Gumtree in seconds.',
+      'Stop copy-pasting listings. SyncSellr publishes your items to eBay, Facebook, Gumtree, Etsy, Vinted, Depop, and Poshmark with one click.',
     images: ['/og-image.png'],
   },
   robots: {
@@ -77,12 +78,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={plusJakarta.variable} suppressHydrationWarning>
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
-      <body className={plusJakarta.className}>
+      <body className={inter.className}>
         <Providers>{children}</Providers>
       </body>
     </html>

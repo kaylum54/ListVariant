@@ -1,5 +1,5 @@
 import { Job } from 'bullmq';
-import { prisma } from '@tom-flips/database';
+import { prisma } from '@syncsellr/database';
 import { createLogger } from '../../lib/logger';
 import { marketplaceRegistry } from '../../services/marketplace/registry';
 import { createWorker, JobType } from '../queue';

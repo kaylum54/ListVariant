@@ -1,7 +1,7 @@
 import type { SelectorConfig, VersionedSelector } from './types';
 import { DEFAULT_SELECTOR_CONFIG } from './defaults';
 
-const STORAGE_KEY = 'tomflips_selector_config';
+const STORAGE_KEY = 'syncsellr_selector_config';
 
 /**
  * SelectorRegistry — self-contained, offline-first selector resolution.

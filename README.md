@@ -1,4 +1,4 @@
-# Tom Flips
+# SyncSellr
 
 Cross-listing platform for furniture resellers. List items once, publish to 7 marketplaces.
 
@@ -19,13 +19,13 @@ Cross-listing platform for furniture resellers. List items once, publish to 7 ma
 Turborepo monorepo with three applications and one shared package:
 
 ```
-tom-flips/
+syncsellr/
   apps/
     api/          Express.js API (port 4000)
     web/          Next.js frontend (port 3000)
     extension/    Chrome Extension (MV3)
   packages/
-    database/     Prisma client (@tom-flips/database)
+    database/     Prisma client (@syncsellr/database)
   docs/
     architecture/ ADR documents
 ```
@@ -62,7 +62,7 @@ The extension automates listing creation on browser-based marketplaces. After bu
 1. Open `chrome://extensions`
 2. Enable "Developer mode"
 3. Click "Load unpacked" and select `apps/extension/dist`
-4. Log in to the Tom Flips web app
+4. Log in to the SyncSellr web app
 5. The extension picks up your auth token automatically
 
 ## Environment Variables

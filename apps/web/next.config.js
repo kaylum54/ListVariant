@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  transpilePackages: ['@tom-flips/ui', '@tom-flips/shared'],
+  transpilePackages: ['@syncsellr/ui', '@syncsellr/shared'],
 };
 
 module.exports = nextConfig;

@@ -4,33 +4,32 @@
 
 @layer base {
   :root {
-    /* PRIMARY - Trust & Professionalism */
-    --color-primary-50: #EEF4FF;
-    --color-primary-500: #6172F3;
-    --color-primary-600: #444CE7;
-    --color-primary-700: #3538CD;
-
-    /* SECONDARY - Growth & Success */
-    --color-secondary-500: #10B981;
-
-    /* ACCENT - Energy & Urgency */
-    --color-accent-500: #F59E0B;
+    /* PRIMARY - Indigo */
+    --color-primary-50: #EEF2FF;
+    --color-primary-100: #E0E7FF;
+    --color-primary-500: #6366F1;
+    --color-primary-600: #4F46E5;
+    --color-primary-700: #4338CA;
+    --color-primary-800: #3730A3;
 
     /* SEMANTIC */
-    --color-success: var(--color-secondary-500);
-    --color-warning: var(--color-accent-500);
-    --color-error: #EF4444;
+    --color-success: #059669;
+    --color-warning: #D97706;
+    --color-error: #DC2626;
+    --color-info: #0284C7;
 
     /* BACKGROUNDS */
     --bg-primary: #FFFFFF;
-    --bg-secondary: #FAFAFA;
+    --bg-secondary: #F9FAFB;
 
     /* TEXT */
-    --text-primary: #1C1917;
-    --text-secondary: #57534E;
+    --text-primary: #111827;
+    --text-secondary: #6B7280;
+    --text-muted: #9CA3AF;
 
-    /* SHADOWS */
-    --shadow-glow-primary: 0 0 40px -10px #6172F3;
+    /* BORDERS */
+    --border-default: #E5E7EB;
+    --border-light: #F3F4F6;
   }
 
   html {
@@ -40,19 +39,21 @@
   body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    color: #111827;
+    line-height: 1.6;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-lg shadow-primary-500/20;
+    @apply inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-sm hover:shadow-md;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 bg-white hover:bg-neutral-50 text-neutral-700 px-6 py-3 rounded-xl font-semibold border-2 border-neutral-200 transition-all;
+    @apply inline-flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-gray-700 px-6 py-3 rounded-xl font-semibold border border-gray-200 transition-all;
   }
 
   .card {
-    @apply bg-white rounded-2xl border border-neutral-200 shadow-sm hover:shadow-lg transition-shadow;
+    @apply bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow transition-shadow;
   }
 }

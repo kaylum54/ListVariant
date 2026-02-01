@@ -10,7 +10,7 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=4000
-      - DATABASE_URL=postgresql://tomflips:tomflips_dev@postgres:5432/tomflips
+      - DATABASE_URL=postgresql://syncsellr:syncsellr_dev@postgres:5432/syncsellr
       - REDIS_URL=redis://redis:6379
       - JWT_SECRET=${JWT_SECRET:-dev-jwt-secret}
       - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET:-dev-jwt-refresh-secret}
@@ -40,13 +40,13 @@ services:
     ports:
       - '5432:5432'
     environment:
-      - POSTGRES_USER=tomflips
-      - POSTGRES_PASSWORD=tomflips_dev
-      - POSTGRES_DB=tomflips
+      - POSTGRES_USER=syncsellr
+      - POSTGRES_PASSWORD=syncsellr_dev
+      - POSTGRES_DB=syncsellr
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U tomflips']
+      test: ['CMD-SHELL', 'pg_isready -U syncsellr']
       interval: 5s
       timeout: 5s
       retries: 5

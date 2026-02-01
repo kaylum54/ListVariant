@@ -52,7 +52,7 @@ export function useAuth() {
     setState({ user: data.user, isLoading: false, isAuthenticated: true });
     // Notify the Chrome extension about the login
     window.dispatchEvent(
-      new CustomEvent('tomflips-auth', {
+      new CustomEvent('syncsellr-auth', {
         detail: { action: 'login', token: data.accessToken },
       })
     );
@@ -72,7 +72,7 @@ export function useAuth() {
       setState({ user: data.user, isLoading: false, isAuthenticated: true });
       // Notify the Chrome extension about the registration
       window.dispatchEvent(
-        new CustomEvent('tomflips-auth', {
+        new CustomEvent('syncsellr-auth', {
           detail: { action: 'login', token: data.accessToken },
         })
       );
@@ -87,7 +87,7 @@ export function useAuth() {
     setState({ user: null, isLoading: false, isAuthenticated: false });
     // Notify the Chrome extension about the logout
     window.dispatchEvent(
-      new CustomEvent('tomflips-auth', {
+      new CustomEvent('syncsellr-auth', {
         detail: { action: 'logout' },
       })
     );

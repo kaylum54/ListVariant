@@ -1,4 +1,4 @@
-# Tom Flips API Reference
+# SyncSellr API Reference
 
 Base URL: `http://localhost:4000/api`
 

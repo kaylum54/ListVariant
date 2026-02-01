@@ -12,7 +12,7 @@ Use PostgreSQL 15 with Prisma ORM.
 ## Consequences
 - Type-safe database queries via generated Prisma Client
 - Schema changes managed via `prisma db push` (development) or `prisma migrate` (production)
-- `@tom-flips/database` package exports the Prisma client for use across apps
+- `@syncsellr/database` package exports the Prisma client for use across apps
 - Generic OAuth token fields on `MarketplaceConnection` support multiple platforms (eBay, Etsy)
 - `OAuthState` model enables PKCE flows for secure OAuth
 

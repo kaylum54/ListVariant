@@ -6,7 +6,7 @@ import { config } from './config';
 import { errorHandler } from './middleware/errorHandler';
 import { requestLogger } from './middleware/requestLogger';
 import { authRateLimiter, apiRateLimiter } from './middleware/security';
-import { prisma } from '@tom-flips/database';
+import { prisma } from '@syncsellr/database';
 import { logger } from './lib/logger';
 import { disconnectRedis } from './lib/redis';
 import { closeQueue } from './jobs/queue';

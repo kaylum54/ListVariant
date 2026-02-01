@@ -1,34 +1,38 @@
 import { Navbar } from '@/components/sections/Navbar';
 import { HeroSection } from '@/components/sections/HeroSection';
 import { PlatformsBar } from '@/components/sections/PlatformsBar';
+import { ProblemSection } from '@/components/sections/ProblemSection';
+import { SolutionSection } from '@/components/sections/SolutionSection';
 import { HowItWorks } from '@/components/sections/HowItWorks';
 import { FeaturesGrid } from '@/components/sections/FeaturesGrid';
 import { PricingSection } from '@/components/sections/PricingSection';
+import { TestimonialsSection } from '@/components/sections/TestimonialsSection';
+import { FAQSection } from '@/components/sections/FAQSection';
 import { CTASection } from '@/components/sections/CTASection';
 import { Footer } from '@/components/sections/Footer';
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
-  name: 'Tom Flips',
+  name: 'SyncSellr',
   applicationCategory: 'BusinessApplication',
   operatingSystem: 'Web',
   description:
-    'Cross-listing platform for UK furniture resellers. List furniture on eBay, Facebook Marketplace, and Gumtree with one click.',
+    'Cross-listing platform for UK resellers. List once and sell on eBay, Facebook Marketplace, Gumtree, Etsy, Vinted, Depop, and Poshmark with one click.',
   offers: [
     {
       '@type': 'Offer',
       price: '0',
       priceCurrency: 'GBP',
-      name: 'Free',
-      description: '10 listings per month, 2 marketplaces, basic analytics',
+      name: 'Starter',
+      description: 'Up to 10 active listings, 3 marketplace connections, basic listing templates',
     },
     {
       '@type': 'Offer',
       price: '14.99',
       priceCurrency: 'GBP',
       name: 'Pro',
-      description: '100 listings per month, all marketplaces, full analytics',
+      description: 'Unlimited active listings, all 7 marketplaces, automatic image sync, smart auto-fill',
     },
     {
       '@type': 'Offer',
@@ -36,7 +40,7 @@ const jsonLd = {
       priceCurrency: 'GBP',
       name: 'Business',
       description:
-        'Unlimited listings, all marketplaces, wholesale catalog access',
+        'Everything in Pro, multiple user accounts, advanced analytics, inventory tracking, dedicated account manager',
     },
   ],
   aggregateRating: {
@@ -57,9 +61,13 @@ export default function LandingPage() {
         <Navbar />
         <HeroSection />
         <PlatformsBar />
+        <ProblemSection />
+        <SolutionSection />
         <HowItWorks />
         <FeaturesGrid />
         <PricingSection />
+        <TestimonialsSection />
+        <FAQSection />
         <CTASection />
         <Footer />
       </main>

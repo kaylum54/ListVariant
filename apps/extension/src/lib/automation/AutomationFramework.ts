@@ -112,7 +112,7 @@ export abstract class AutomationFramework {
     for (let i = 0; i < selectors.length; i++) {
       const el = document.querySelector(selectors[i]);
       if (el) {
-        console.log(`[TomFlips:${this.platform}] Selector matched [${i}]: ${selectors[i]}`);
+        console.log(`[SyncSellr:${this.platform}] Selector matched [${i}]: ${selectors[i]}`);
         return el;
       }
     }
@@ -122,7 +122,7 @@ export abstract class AutomationFramework {
       for (let i = 0; i < selectors.length; i++) {
         const el = document.querySelector(selectors[i]);
         if (el) {
-          console.log(`[TomFlips:${this.platform}] Selector matched [${i}]: ${selectors[i]}`);
+          console.log(`[SyncSellr:${this.platform}] Selector matched [${i}]: ${selectors[i]}`);
           return el;
         }
       }
@@ -268,7 +268,7 @@ export abstract class AutomationFramework {
   // --- Logging ---
 
   protected log(message: string, data?: any): void {
-    const prefix = `[TomFlips:${this.platform}]`;
+    const prefix = `[SyncSellr:${this.platform}]`;
     if (data) {
       console.log(prefix, message, data);
     } else {
@@ -277,6 +277,6 @@ export abstract class AutomationFramework {
   }
 
   protected error(message: string, detail?: string): void {
-    console.error(`[TomFlips:${this.platform}]`, message, detail || '');
+    console.error(`[SyncSellr:${this.platform}]`, message, detail || '');
   }
 }

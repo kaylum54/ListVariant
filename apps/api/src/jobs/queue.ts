@@ -38,7 +38,7 @@ function parseRedisConnection(): { host: string; port: number; password?: string
 
 const redisConnection = parseRedisConnection();
 
-export const jobQueue = new Queue('tom-flips', {
+export const jobQueue = new Queue('syncsellr', {
   connection: redisConnection,
   defaultJobOptions: {
     attempts: 3,
@@ -57,7 +57,7 @@ export function createWorker(
   processor: (job: Job) => Promise<void>,
   concurrency = 3
 ): Worker {
-  const worker = new Worker('tom-flips', processor, {
+  const worker = new Worker('syncsellr', processor, {
     connection: redisConnection,
     concurrency,
     stalledInterval: 30000, // Check for stalled jobs every 30s

@@ -1,5 +1,5 @@
 {
-  "name": "@tom-flips/api",
+  "name": "@syncsellr/api",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -11,8 +11,8 @@
     "clean": "rm -rf dist .turbo node_modules"
   },
   "dependencies": {
-    "@tom-flips/database": "*",
-    "@tom-flips/shared": "*",
+    "@syncsellr/database": "*",
+    "@syncsellr/shared": "*",
     "axios": "^1.6.5",
     "bcryptjs": "^2.4.3",
     "bullmq": "^5.67.2",

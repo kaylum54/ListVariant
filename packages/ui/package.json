@@ -1,5 +1,5 @@
 {
-  "name": "@tom-flips/ui",
+  "name": "@syncsellr/ui",
   "version": "1.0.0",
   "private": true,
   "main": "./src/index.ts",

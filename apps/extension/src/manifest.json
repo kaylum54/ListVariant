@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Tom Flips",
+  "name": "SyncSellr",
   "version": "1.0.0",
   "description": "Cross-listing tool for furniture resellers",
   "permissions": [

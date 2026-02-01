@@ -2,18 +2,18 @@ import { delay, randomDelay } from '../utils/delay';
 import { waitForElement } from '../utils/dom';
 import { checkLoginStatus, showLoginError, showSuccessToast } from '../lib/loginDetection';
 
-console.log('[TomFlips] Facebook content script loaded on:', window.location.href);
+console.log('[SyncSellr] Facebook content script loaded on:', window.location.href);
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  console.log('[TomFlips] Message received:', message.type);
+  console.log('[SyncSellr] Message received:', message.type);
   if (message.type === 'CREATE_LISTING') {
     createListing(message.listing)
       .then((result) => {
-        console.log('[TomFlips] createListing result:', result);
+        console.log('[SyncSellr] createListing result:', result);
         sendResponse(result);
       })
       .catch((error) => {
-        console.error('[TomFlips] createListing error:', error);
+        console.error('[SyncSellr] createListing error:', error);
         sendResponse({ success: false, error: error.message });
       });
     return true;
@@ -21,7 +21,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 async function createListing(listing: any) {
-  console.log('[TomFlips] Starting createListing with data:', {
+  console.log('[SyncSellr] Starting createListing with data:', {
     title: listing.title,
     price: listing.price,
     condition: listing.condition,
@@ -39,12 +39,12 @@ async function createListing(listing: any) {
     }
 
     // Step 1: Make sure we're on the create page
-    console.log('[TomFlips] Step 1: Navigate to create listing');
+    console.log('[SyncSellr] Step 1: Navigate to create listing');
     await navigateToCreateListing();
     await delay(2000);
 
     // Step 2: Select "Item for Sale" if the listing type chooser is shown
-    console.log('[TomFlips] Step 2: Select "Item for Sale"');
+    console.log('[SyncSellr] Step 2: Select "Item for Sale"');
     await selectItemForSale();
     // Wait longer for the form to load after selection
     await delay(3000);
@@ -53,43 +53,43 @@ async function createListing(listing: any) {
     await logFormElements();
 
     // Step 4: Fill text fields
-    console.log('[TomFlips] Step 4: Fill title');
+    console.log('[SyncSellr] Step 4: Fill title');
     await fillTitle(listing.title);
     await delay(randomDelay(500, 1000));
 
-    console.log('[TomFlips] Step 5: Fill price');
+    console.log('[SyncSellr] Step 5: Fill price');
     await fillPrice(listing.price);
     await delay(randomDelay(500, 1000));
 
     // Step 5: Upload images (using pre-fetched data URLs from background)
     if (listing.images?.length > 0) {
-      console.log('[TomFlips] Step 6: Upload images');
+      console.log('[SyncSellr] Step 6: Upload images');
       await uploadImages(listing.images);
       await delay(2000);
     }
 
     // Step 6: Select category
-    console.log('[TomFlips] Step 7: Select category');
+    console.log('[SyncSellr] Step 7: Select category');
     await selectCategory('Furniture');
     await delay(randomDelay(500, 1000));
 
     // Step 7: Select condition
     if (listing.condition) {
-      console.log('[TomFlips] Step 8: Select condition');
+      console.log('[SyncSellr] Step 8: Select condition');
       await selectCondition(listing.condition);
       await delay(randomDelay(500, 1000));
     }
 
     // Step 8: Fill description
-    console.log('[TomFlips] Step 9: Fill description');
+    console.log('[SyncSellr] Step 9: Fill description');
     await fillDescription(listing.description || listing.title);
     await delay(randomDelay(500, 1000));
 
-    console.log('[TomFlips] All fields filled. Review and publish manually.');
+    console.log('[SyncSellr] All fields filled. Review and publish manually.');
     showSuccessToast('Facebook Marketplace');
     return { success: true };
   } catch (error: any) {
-    console.error('[TomFlips] Error during listing creation:', error.message);
+    console.error('[SyncSellr] Error during listing creation:', error.message);
     chrome.runtime.sendMessage({
       type: 'REPORT_LISTING_STATUS',
       listingId: listing.id,
@@ -102,7 +102,7 @@ async function createListing(listing: any) {
 
 async function navigateToCreateListing() {
   if (window.location.href.includes('/marketplace/create')) {
-    console.log('[TomFlips] Already on create page, skipping navigation');
+    console.log('[SyncSellr] Already on create page, skipping navigation');
     return;
   }
   window.location.href = 'https://www.facebook.com/marketplace/create/item';
@@ -119,7 +119,7 @@ async function selectItemForSale() {
   for (const selector of selectors) {
     const button = await waitForElement(selector, 2000);
     if (button) {
-      console.log('[TomFlips] Found "Item for Sale" with selector:', selector);
+      console.log('[SyncSellr] Found "Item for Sale" with selector:', selector);
       (button as HTMLElement).click();
       return;
     }
@@ -130,48 +130,48 @@ async function selectItemForSale() {
   for (const el of allElements) {
     const text = el.textContent?.trim().toLowerCase();
     if (text === 'item for sale') {
-      console.log('[TomFlips] Found "Item for Sale" by text content');
+      console.log('[SyncSellr] Found "Item for Sale" by text content');
       (el as HTMLElement).click();
       return;
     }
   }
 
-  console.log('[TomFlips] Could not find "Item for Sale" button - may already be on item form');
+  console.log('[SyncSellr] Could not find "Item for Sale" button - may already be on item form');
 }
 
 // Debug helper: log all form elements we can find
 async function logFormElements() {
   const inputs = document.querySelectorAll('input:not([type="hidden"])');
-  console.log('[TomFlips] Visible inputs found:', inputs.length);
+  console.log('[SyncSellr] Visible inputs found:', inputs.length);
   inputs.forEach((el, i) => {
     const input = el as HTMLInputElement;
-    console.log(`[TomFlips]   input[${i}] type=${input.type} aria-label="${input.getAttribute('aria-label')}" placeholder="${input.placeholder}" name="${input.name}" id="${input.id}"`);
+    console.log(`[SyncSellr]   input[${i}] type=${input.type} aria-label="${input.getAttribute('aria-label')}" placeholder="${input.placeholder}" name="${input.name}" id="${input.id}"`);
   });
 
   const textareas = document.querySelectorAll('textarea');
-  console.log('[TomFlips] Textareas found:', textareas.length);
+  console.log('[SyncSellr] Textareas found:', textareas.length);
   textareas.forEach((el, i) => {
-    console.log(`[TomFlips]   textarea[${i}] aria-label="${el.getAttribute('aria-label')}" placeholder="${el.placeholder}" name="${el.name}"`);
+    console.log(`[SyncSellr]   textarea[${i}] aria-label="${el.getAttribute('aria-label')}" placeholder="${el.placeholder}" name="${el.name}"`);
   });
 
   const editables = document.querySelectorAll('[contenteditable="true"]');
-  console.log('[TomFlips] Contenteditable elements found:', editables.length);
+  console.log('[SyncSellr] Contenteditable elements found:', editables.length);
   editables.forEach((el, i) => {
-    console.log(`[TomFlips]   editable[${i}] aria-label="${el.getAttribute('aria-label')}" role="${el.getAttribute('role')}" tag=${el.tagName}`);
+    console.log(`[SyncSellr]   editable[${i}] aria-label="${el.getAttribute('aria-label')}" role="${el.getAttribute('role')}" tag=${el.tagName}`);
   });
 
   const labels = document.querySelectorAll('label');
-  console.log('[TomFlips] Labels found:', labels.length);
+  console.log('[SyncSellr] Labels found:', labels.length);
   labels.forEach((el, i) => {
     const text = el.textContent?.trim().substring(0, 40);
-    console.log(`[TomFlips]   label[${i}] text="${text}" for="${el.getAttribute('for')}"`);
+    console.log(`[SyncSellr]   label[${i}] text="${text}" for="${el.getAttribute('for')}"`);
   });
 
   // Look for any element with role="textbox"
   const textboxes = document.querySelectorAll('[role="textbox"]');
-  console.log('[TomFlips] Elements with role=textbox:', textboxes.length);
+  console.log('[SyncSellr] Elements with role=textbox:', textboxes.length);
   textboxes.forEach((el, i) => {
-    console.log(`[TomFlips]   textbox[${i}] aria-label="${el.getAttribute('aria-label')}" tag=${el.tagName}`);
+    console.log(`[SyncSellr]   textbox[${i}] aria-label="${el.getAttribute('aria-label')}" tag=${el.tagName}`);
   });
 
   // Look for spans containing field names
@@ -185,22 +185,22 @@ async function logFormElements() {
     }
   });
   if (relevantSpans.length > 0) {
-    console.log('[TomFlips] Field-name spans found:', relevantSpans.join(', '));
+    console.log('[SyncSellr] Field-name spans found:', relevantSpans.join(', '));
   }
 }
 
 async function uploadImages(images: Array<{ url: string; dataUrl?: string }>) {
-  console.log('[TomFlips] Looking for file input...');
+  console.log('[SyncSellr] Looking for file input...');
   const fileInput = await waitForElement(
     'input[type="file"][accept*="image"], input[type="file"]',
     5000
   ) as HTMLInputElement | null;
 
   if (!fileInput) {
-    console.warn('[TomFlips] Could not find image upload input, skipping images');
+    console.warn('[SyncSellr] Could not find image upload input, skipping images');
     return;
   }
-  console.log('[TomFlips] Found file input, uploading', images.length, 'images');
+  console.log('[SyncSellr] Found file input, uploading', images.length, 'images');
 
   for (const image of images) {
     try {
@@ -209,13 +209,13 @@ async function uploadImages(images: Array<{ url: string; dataUrl?: string }>) {
         // Use pre-fetched data URL from background script (avoids CORS)
         const response = await fetch(image.dataUrl);
         blob = await response.blob();
-        console.log('[TomFlips] Using pre-fetched data URL for image');
+        console.log('[SyncSellr] Using pre-fetched data URL for image');
       } else {
         // Fallback: try direct fetch
-        console.log('[TomFlips] Fetching image directly:', image.url);
+        console.log('[SyncSellr] Fetching image directly:', image.url);
         const response = await fetch(image.url);
         if (!response.ok) {
-          console.warn('[TomFlips] Failed to fetch image:', response.status);
+          console.warn('[SyncSellr] Failed to fetch image:', response.status);
           continue;
         }
         blob = await response.blob();
@@ -226,11 +226,11 @@ async function uploadImages(images: Array<{ url: string; dataUrl?: string }>) {
       dataTransfer.items.add(file);
       fileInput.files = dataTransfer.files;
       fileInput.dispatchEvent(new Event('change', { bubbles: true }));
-      console.log('[TomFlips] Image attached to file input');
+      console.log('[SyncSellr] Image attached to file input');
 
       await delay(1500);
     } catch (err: any) {
-      console.warn('[TomFlips] Error uploading image:', err.message);
+      console.warn('[SyncSellr] Error uploading image:', err.message);
     }
   }
 }
@@ -238,21 +238,21 @@ async function uploadImages(images: Array<{ url: string; dataUrl?: string }>) {
 async function fillTitle(title: string) {
   const input = await findInputByLabel('Title');
   if (!input) {
-    console.error('[TomFlips] Could not find title input');
+    console.error('[SyncSellr] Could not find title input');
     throw new Error('Could not find title input');
   }
   await setFieldValue(input, title);
-  console.log('[TomFlips] Title filled:', title);
+  console.log('[SyncSellr] Title filled:', title);
 }
 
 async function fillPrice(price: number) {
   const input = await findInputByLabel('Price');
   if (!input) {
-    console.warn('[TomFlips] Could not find price input, skipping');
+    console.warn('[SyncSellr] Could not find price input, skipping');
     return;
   }
   await setFieldValue(input, price.toString());
-  console.log('[TomFlips] Price filled:', price);
+  console.log('[SyncSellr] Price filled:', price);
 }
 
 async function selectCategory(category: string) {
@@ -262,11 +262,11 @@ async function selectCategory(category: string) {
     await delay(1000);
 
     const options = document.querySelectorAll('[role="option"], [role="menuitem"], [role="listbox"] [role="option"]');
-    console.log('[TomFlips] Found', options.length, 'category options');
+    console.log('[SyncSellr] Found', options.length, 'category options');
     for (const option of options) {
       if (option.textContent?.includes(category)) {
         (option as HTMLElement).click();
-        console.log('[TomFlips] Selected category:', category);
+        console.log('[SyncSellr] Selected category:', category);
         return;
       }
     }
@@ -276,14 +276,14 @@ async function selectCategory(category: string) {
     for (const option of allOptions) {
       if (option.textContent?.trim().includes(category)) {
         (option as HTMLElement).click();
-        console.log('[TomFlips] Selected category by text:', category);
+        console.log('[SyncSellr] Selected category by text:', category);
         return;
       }
     }
 
-    console.warn('[TomFlips] Category not found:', category);
+    console.warn('[SyncSellr] Category not found:', category);
   } else {
-    console.warn('[TomFlips] Category button not found, skipping');
+    console.warn('[SyncSellr] Category button not found, skipping');
   }
 }
 
@@ -305,13 +305,13 @@ async function selectCondition(condition: string) {
     for (const option of options) {
       if (option.textContent?.includes(targetText)) {
         (option as HTMLElement).click();
-        console.log('[TomFlips] Selected condition:', targetText);
+        console.log('[SyncSellr] Selected condition:', targetText);
         return;
       }
     }
-    console.warn('[TomFlips] Condition option not found:', targetText);
+    console.warn('[SyncSellr] Condition option not found:', targetText);
   } else {
-    console.warn('[TomFlips] Condition button not found, skipping');
+    console.warn('[SyncSellr] Condition button not found, skipping');
   }
 }
 
@@ -320,7 +320,7 @@ async function fillDescription(description: string) {
   const textarea = await findInputByLabel('Description');
   if (textarea) {
     await setFieldValue(textarea, description);
-    console.log('[TomFlips] Description filled');
+    console.log('[SyncSellr] Description filled');
     return;
   }
 
@@ -332,7 +332,7 @@ async function fillDescription(description: string) {
       (el as HTMLElement).focus();
       (el as HTMLElement).textContent = description;
       el.dispatchEvent(new InputEvent('input', { bubbles: true, data: description }));
-      console.log('[TomFlips] Description filled via contenteditable');
+      console.log('[SyncSellr] Description filled via contenteditable');
       return;
     }
   }
@@ -341,11 +341,11 @@ async function fillDescription(description: string) {
   const anyTextarea = document.querySelector('textarea');
   if (anyTextarea) {
     await setFieldValue(anyTextarea, description);
-    console.log('[TomFlips] Description filled via fallback textarea');
+    console.log('[SyncSellr] Description filled via fallback textarea');
     return;
   }
 
-  console.warn('[TomFlips] Could not find description field, skipping');
+  console.warn('[SyncSellr] Could not find description field, skipping');
 }
 
 // --- Helper functions ---
@@ -363,7 +363,7 @@ async function findInputByLabel(labelText: string): Promise<HTMLInputElement | H
   for (const selector of ariaSelectors) {
     const el = document.querySelector(selector);
     if (el) {
-      console.log(`[TomFlips] Found "${labelText}" field via aria-label`);
+      console.log(`[SyncSellr] Found "${labelText}" field via aria-label`);
       return el as HTMLInputElement | HTMLTextAreaElement;
     }
   }
@@ -377,7 +377,7 @@ async function findInputByLabel(labelText: string): Promise<HTMLInputElement | H
   for (const selector of placeholderSelectors) {
     const el = document.querySelector(selector);
     if (el) {
-      console.log(`[TomFlips] Found "${labelText}" field via placeholder`);
+      console.log(`[SyncSellr] Found "${labelText}" field via placeholder`);
       return el as HTMLInputElement | HTMLTextAreaElement;
     }
   }
@@ -389,7 +389,7 @@ async function findInputByLabel(labelText: string): Promise<HTMLInputElement | H
       // Check for a direct child input
       const childInput = label.querySelector('input, textarea');
       if (childInput) {
-        console.log(`[TomFlips] Found "${labelText}" field via label child`);
+        console.log(`[SyncSellr] Found "${labelText}" field via label child`);
         return childInput as HTMLInputElement | HTMLTextAreaElement;
       }
 
@@ -398,7 +398,7 @@ async function findInputByLabel(labelText: string): Promise<HTMLInputElement | H
       if (forId) {
         const el = document.getElementById(forId);
         if (el) {
-          console.log(`[TomFlips] Found "${labelText}" field via label[for]`);
+          console.log(`[SyncSellr] Found "${labelText}" field via label[for]`);
           return el as HTMLInputElement | HTMLTextAreaElement;
         }
       }
@@ -408,7 +408,7 @@ async function findInputByLabel(labelText: string): Promise<HTMLInputElement | H
       while (sibling) {
         const input = sibling.querySelector('input, textarea') || (sibling.matches('input, textarea') ? sibling : null);
         if (input) {
-          console.log(`[TomFlips] Found "${labelText}" field via sibling`);
+          console.log(`[SyncSellr] Found "${labelText}" field via sibling`);
           return input as HTMLInputElement | HTMLTextAreaElement;
         }
         sibling = sibling.nextElementSibling;
@@ -419,7 +419,7 @@ async function findInputByLabel(labelText: string): Promise<HTMLInputElement | H
       if (parent) {
         const nearbyInput = parent.querySelector('input:not([type="hidden"]), textarea');
         if (nearbyInput) {
-          console.log(`[TomFlips] Found "${labelText}" field via parent`);
+          console.log(`[SyncSellr] Found "${labelText}" field via parent`);
           return nearbyInput as HTMLInputElement | HTMLTextAreaElement;
         }
         // Go up one more level
@@ -427,7 +427,7 @@ async function findInputByLabel(labelText: string): Promise<HTMLInputElement | H
         if (grandparent) {
           const gpInput = grandparent.querySelector('input:not([type="hidden"]), textarea');
           if (gpInput) {
-            console.log(`[TomFlips] Found "${labelText}" field via grandparent`);
+            console.log(`[SyncSellr] Found "${labelText}" field via grandparent`);
             return gpInput as HTMLInputElement | HTMLTextAreaElement;
           }
         }
@@ -439,12 +439,12 @@ async function findInputByLabel(labelText: string): Promise<HTMLInputElement | H
   for (const selector of ariaSelectors) {
     const el = await waitForElement(selector, 3000);
     if (el) {
-      console.log(`[TomFlips] Found "${labelText}" field via waitForElement`);
+      console.log(`[SyncSellr] Found "${labelText}" field via waitForElement`);
       return el as HTMLInputElement | HTMLTextAreaElement;
     }
   }
 
-  console.warn(`[TomFlips] Could not find "${labelText}" field with any strategy`);
+  console.warn(`[SyncSellr] Could not find "${labelText}" field with any strategy`);
   return null;
 }
 

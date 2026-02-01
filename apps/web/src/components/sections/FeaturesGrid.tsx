@@ -1,63 +1,50 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import {
-  Zap,
-  ShieldCheck,
-  Package,
-  LayoutGrid,
-  BarChart3,
-  Network,
-} from 'lucide-react';
+import { Zap, Store, Bot, ImagePlus, MapPin, Plug } from 'lucide-react';
 
 const features = [
   {
     icon: Zap,
-    title: 'One-Click Cross-Listing',
+    title: 'One-Click Listing',
     description:
-      'Create your listing once and publish to all platforms instantly with our Chrome extension.',
-    color: 'bg-primary-50 text-primary-600',
+      'Create your listing once and publish it to multiple marketplaces simultaneously. No more copy-pasting between tabs.',
   },
   {
-    icon: ShieldCheck,
-    title: 'Auto-Delist on Sale',
+    icon: Store,
+    title: '7 Marketplaces',
     description:
-      'When an item sells, we automatically remove it from other platforms to prevent double-selling.',
-    color: 'bg-secondary-50 text-secondary-600',
+      'Reach buyers on eBay, Facebook, Gumtree, Etsy, Vinted, Depop, and Poshmark from a single dashboard.',
   },
   {
-    icon: Package,
-    title: 'Wholesale Catalog',
+    icon: Bot,
+    title: 'Smart Auto-Fill',
     description:
-      "Access Tom's wholesale furniture catalog with pre-loaded photos and descriptions.",
-    color: 'bg-accent-50 text-accent-600',
+      "Our Chrome extension fills in each marketplace's forms automatically. It handles the quirks of every platform so you don't have to.",
   },
   {
-    icon: LayoutGrid,
-    title: 'Inventory Management',
+    icon: ImagePlus,
+    title: 'Image Sync',
     description:
-      'Track all your items, costs, and profits in one centralized dashboard.',
-    color: 'bg-purple-50 text-purple-600',
+      'Upload your photos once. SyncSellr sends them to every platform in the right format and dimensions automatically.',
   },
   {
-    icon: BarChart3,
-    title: 'Analytics & Insights',
+    icon: MapPin,
+    title: 'Gumtree Ready',
     description:
-      'See which platforms sell best, track profit margins, and optimize your listings.',
-    color: 'bg-rose-50 text-rose-600',
+      'We are the first UK tool to support Gumtree cross-listing. Reach local buyers that other platforms miss entirely.',
   },
   {
-    icon: Network,
-    title: 'Multi-Platform Support',
+    icon: Plug,
+    title: 'Simple Setup',
     description:
-      'eBay, Facebook Marketplace, and Gumtree \u2014 with more platforms coming soon.',
-    color: 'bg-cyan-50 text-cyan-600',
+      'Install the extension, connect your accounts, and start listing. No API keys or developer setup needed for most platforms.',
   },
 ];
 
 export const FeaturesGrid = () => {
   return (
-    <section id="features" className="py-24 px-4 bg-neutral-50" aria-labelledby="features-heading">
+    <section id="features" className="py-20 md:py-28 px-4 bg-gray-50" aria-labelledby="features-heading">
       <div className="max-w-7xl mx-auto">
         <motion.div
           className="text-center mb-16"
@@ -65,11 +52,11 @@ export const FeaturesGrid = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h2 id="features-heading" className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
-            Everything you need to scale your furniture business
+          <h2 id="features-heading" className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Everything you need to list faster
           </h2>
-          <p className="text-neutral-600 max-w-xl mx-auto text-lg">
-            Powerful tools built specifically for furniture resellers
+          <p className="text-gray-500 max-w-xl mx-auto text-lg">
+            Powerful tools built for UK marketplace resellers
           </p>
         </motion.div>
 
@@ -77,21 +64,19 @@ export const FeaturesGrid = () => {
           {features.map((feature, i) => (
             <motion.div
               key={feature.title}
-              className="group p-6 bg-white rounded-2xl border border-neutral-200 shadow-sm hover:shadow-lg hover:border-primary-200 transition-all duration-300"
+              className="p-6 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow transition-shadow"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.08 }}
             >
-              <div
-                className={`w-12 h-12 rounded-xl flex items-center justify-center ${feature.color} mb-4 group-hover:scale-110 transition-transform`}
-              >
-                <feature.icon className="w-6 h-6" />
+              <div className="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center mb-4">
+                <feature.icon className="w-6 h-6 text-indigo-600" />
               </div>
-              <h3 className="text-lg font-semibold text-neutral-900 mb-2">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 {feature.title}
               </h3>
-              <p className="text-neutral-600 leading-relaxed">
+              <p className="text-gray-500 leading-relaxed">
                 {feature.description}
               </p>
             </motion.div>

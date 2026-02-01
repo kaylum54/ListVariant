@@ -126,11 +126,11 @@ export function showLoginError(platform: string): void {
   if (!config) return;
 
   // Remove existing overlay if any
-  const existing = document.getElementById('tom-flips-login-error');
+  const existing = document.getElementById('syncsellr-login-error');
   if (existing) existing.remove();
 
   const overlay = document.createElement('div');
-  overlay.id = 'tom-flips-login-error';
+  overlay.id = 'syncsellr-login-error';
   overlay.innerHTML = `
     <div style="
       position: fixed;
@@ -175,7 +175,7 @@ export function showLoginError(platform: string): void {
           line-height: 1.5;
         ">You need to be logged into ${config.name} to create a listing. Log in and try again.</p>
         <div style="display: flex; gap: 12px; justify-content: center;">
-          <button id="tom-flips-login-close" style="
+          <button id="syncsellr-login-close" style="
             padding: 10px 20px;
             border-radius: 8px;
             border: 1px solid #d1d5db;
@@ -205,7 +205,7 @@ export function showLoginError(platform: string): void {
   document.body.appendChild(overlay);
 
   // Close button handler
-  document.getElementById('tom-flips-login-close')?.addEventListener('click', () => {
+  document.getElementById('syncsellr-login-close')?.addEventListener('click', () => {
     overlay.remove();
   });
 
@@ -222,11 +222,11 @@ export function showLoginError(platform: string): void {
  */
 export function showSuccessToast(platformName: string): void {
   // Remove existing toast
-  const existing = document.getElementById('tom-flips-success-toast');
+  const existing = document.getElementById('syncsellr-success-toast');
   if (existing) existing.remove();
 
   const toast = document.createElement('div');
-  toast.id = 'tom-flips-success-toast';
+  toast.id = 'syncsellr-success-toast';
   toast.innerHTML = `
     <div style="
       position: fixed;
@@ -242,7 +242,7 @@ export function showSuccessToast(platformName: string): void {
       display: flex;
       align-items: center;
       gap: 12px;
-      animation: tom-flips-slide-in 0.3s ease-out;
+      animation: syncsellr-slide-in 0.3s ease-out;
       max-width: 400px;
     ">
       <div style="
@@ -262,7 +262,7 @@ export function showSuccessToast(platformName: string): void {
       </div>
     </div>
     <style>
-      @keyframes tom-flips-slide-in {
+      @keyframes syncsellr-slide-in {
         from { transform: translateY(20px); opacity: 0; }
         to { transform: translateY(0); opacity: 1; }
       }

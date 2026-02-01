@@ -86,4 +86,4 @@ class Logger {
 }
 
 export const createLogger = (service: string): Logger => new Logger(service);
-export const logger = createLogger('tom-flips-api');
+export const logger = createLogger('syncsellr-api');

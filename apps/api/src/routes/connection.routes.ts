@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { prisma } from '@tom-flips/database';
+import { prisma } from '@syncsellr/database';
 import { authenticate, AuthRequest } from '../middleware/auth';
 import { EbayService } from '../services/ebay.service';
 import { EtsyService } from '../services/marketplace/etsy.service';

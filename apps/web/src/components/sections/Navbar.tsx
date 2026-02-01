@@ -7,8 +7,9 @@ import { Menu, X } from 'lucide-react';
 
 const navLinks = [
   { href: '#features', label: 'Features' },
-  { href: '#pricing', label: 'Pricing' },
   { href: '#how-it-works', label: 'How It Works' },
+  { href: '#pricing', label: 'Pricing' },
+  { href: '#faq', label: 'FAQ' },
 ];
 
 export const Navbar = () => {
@@ -25,26 +26,22 @@ export const Navbar = () => {
     <nav
       role="navigation"
       aria-label="Main navigation"
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        scrolled
-          ? 'bg-white/90 backdrop-blur-md border-b border-neutral-200 shadow-sm'
-          : 'bg-transparent'
+      className={`fixed top-0 w-full z-50 transition-all duration-300 bg-white ${
+        scrolled ? 'border-b border-gray-200 shadow-sm' : ''
       }`}
     >
-      {/* Skip to main content link for keyboard users */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[60] focus:bg-primary-600 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm focus:font-medium"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[60] focus:bg-indigo-600 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm focus:font-medium"
       >
         Skip to main content
       </a>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2" aria-label="Tom Flips - Home">
-            <div className="w-8 h-8 bg-gradient-to-br from-primary-600 to-primary-500 rounded-lg" aria-hidden="true" />
-            <span className="font-bold text-xl text-neutral-900">
-              Tom Flips
+          <Link href="/" className="flex items-center" aria-label="SyncSellr - Home">
+            <span className="font-bold text-xl text-gray-900">
+              SyncSellr
             </span>
           </Link>
 
@@ -54,32 +51,26 @@ export const Navbar = () => {
               <a
                 key={link.href}
                 href={link.href}
-                className="text-neutral-600 hover:text-neutral-900 text-sm font-medium transition-colors"
+                className="text-gray-500 hover:text-gray-900 text-sm font-medium transition-colors"
               >
                 {link.label}
               </a>
             ))}
           </div>
 
-          {/* Desktop CTAs */}
-          <div className="hidden md:flex items-center gap-4">
-            <Link
-              href="/login"
-              className="text-neutral-600 hover:text-neutral-900 text-sm font-medium transition-colors"
-            >
-              Sign in
-            </Link>
+          {/* Desktop CTA */}
+          <div className="hidden md:flex items-center">
             <Link
               href="/register"
-              className="inline-flex items-center h-10 px-5 rounded-xl font-semibold bg-primary-600 text-white hover:bg-primary-700 transition-colors text-sm shadow-sm shadow-primary-500/20"
+              className="inline-flex items-center h-10 px-5 rounded-xl font-semibold bg-indigo-600 text-white hover:bg-indigo-700 transition-colors text-sm"
             >
-              Get Started
+              Get Started Free
             </Link>
           </div>
 
           {/* Mobile hamburger */}
           <button
-            className="md:hidden p-2 text-neutral-600"
+            className="md:hidden p-2 text-gray-500"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-expanded={mobileOpen}
             aria-controls="mobile-menu"
@@ -95,7 +86,7 @@ export const Navbar = () => {
         {mobileOpen && (
           <motion.div
             id="mobile-menu"
-            className="md:hidden bg-white border-b border-neutral-200"
+            className="md:hidden bg-white border-b border-gray-200"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
@@ -105,24 +96,18 @@ export const Navbar = () => {
                 <a
                   key={link.href}
                   href={link.href}
-                  className="block text-neutral-600 hover:text-neutral-900 text-sm font-medium py-2"
+                  className="block text-gray-500 hover:text-gray-900 text-sm font-medium py-2"
                   onClick={() => setMobileOpen(false)}
                 >
                   {link.label}
                 </a>
               ))}
-              <div className="pt-3 border-t border-neutral-100 flex flex-col gap-2">
-                <Link
-                  href="/login"
-                  className="text-neutral-600 text-sm font-medium py-2"
-                >
-                  Sign in
-                </Link>
+              <div className="pt-3 border-t border-gray-100">
                 <Link
                   href="/register"
-                  className="inline-flex items-center justify-center h-10 px-5 rounded-xl font-semibold bg-primary-600 text-white text-sm"
+                  className="inline-flex items-center justify-center w-full h-10 px-5 rounded-xl font-semibold bg-indigo-600 text-white text-sm"
                 >
-                  Get Started
+                  Get Started Free
                 </Link>
               </div>
             </div>

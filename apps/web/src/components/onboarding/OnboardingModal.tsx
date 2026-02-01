@@ -45,7 +45,7 @@ export function OnboardingModal({ isOpen, onClose, onComplete }: OnboardingModal
   useEffect(() => {
     if (!isOpen) return;
     const check = () => {
-      const marker = document.getElementById('tom-flips-extension-marker');
+      const marker = document.getElementById('syncsellr-extension-marker');
       setExtensionDetected(!!marker);
     };
     check();
@@ -115,9 +115,9 @@ export function OnboardingModal({ isOpen, onClose, onComplete }: OnboardingModal
                   key={i}
                   className={`h-2 rounded-full transition-all duration-300 ${
                     i === step
-                      ? 'w-8 bg-blue-600'
+                      ? 'w-8 bg-indigo-600'
                       : i < step
-                        ? 'w-2 bg-blue-400'
+                        ? 'w-2 bg-indigo-400'
                         : 'w-2 bg-gray-300'
                   }`}
                 />
@@ -197,14 +197,14 @@ function StepExtension({
 }) {
   return (
     <div className="text-center">
-      <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-5">
-        <Puzzle className="w-8 h-8 text-blue-600" />
+      <div className="w-16 h-16 bg-indigo-100 rounded-2xl flex items-center justify-center mx-auto mb-5">
+        <Puzzle className="w-8 h-8 text-indigo-600" />
       </div>
       <h2 className="text-xl font-bold text-gray-900 mb-2">
         Install the Browser Extension
       </h2>
       <p className="text-gray-500 text-sm mb-6 leading-relaxed">
-        The Tom Flips browser extension handles cross-listing to Facebook Marketplace,
+        The SyncSellr browser extension handles cross-listing to Facebook Marketplace,
         Gumtree, Vinted, Depop, and Poshmark. It works alongside this dashboard to
         automate your listings.
       </p>
@@ -215,7 +215,7 @@ function StepExtension({
           <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" />
           <div className="text-left">
             <p className="text-sm font-medium text-green-800">Extension Installed</p>
-            <p className="text-xs text-green-600">The Tom Flips extension is detected and ready.</p>
+            <p className="text-xs text-green-600">The SyncSellr extension is detected and ready.</p>
           </div>
         </div>
       ) : (
@@ -239,7 +239,7 @@ function StepExtension({
 
       <button
         onClick={onNext}
-        className="w-full bg-blue-600 text-white hover:bg-blue-700 rounded-lg px-6 py-2.5 font-medium transition-colors inline-flex items-center justify-center gap-2"
+        className="w-full bg-indigo-600 text-white hover:bg-indigo-700 rounded-lg px-6 py-2.5 font-medium transition-colors inline-flex items-center justify-center gap-2"
       >
         Next
         <ArrowRight className="w-4 h-4" />
@@ -263,8 +263,8 @@ function StepMarketplaces({
   return (
     <div>
       <div className="text-center mb-6">
-        <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-5">
-          <Globe className="w-8 h-8 text-blue-600" />
+        <div className="w-16 h-16 bg-indigo-100 rounded-2xl flex items-center justify-center mx-auto mb-5">
+          <Globe className="w-8 h-8 text-indigo-600" />
         </div>
         <h2 className="text-xl font-bold text-gray-900 mb-2">
           Log Into Your Marketplaces
@@ -285,7 +285,7 @@ function StepMarketplaces({
                 onClick={() => onToggle(platform.id)}
                 className={`w-5 h-5 rounded flex items-center justify-center border-2 transition-colors ${
                   checkedPlatforms[platform.id]
-                    ? 'bg-blue-600 border-blue-600'
+                    ? 'bg-indigo-600 border-indigo-600'
                     : 'border-gray-300 hover:border-gray-400'
                 }`}
               >
@@ -304,7 +304,7 @@ function StepMarketplaces({
               href={platform.loginUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs font-medium text-blue-600 hover:text-blue-700 inline-flex items-center gap-1"
+              className="text-xs font-medium text-indigo-600 hover:text-indigo-700 inline-flex items-center gap-1"
             >
               Open
               <ExternalLink className="w-3 h-3" />
@@ -322,7 +322,7 @@ function StepMarketplaces({
         </button>
         <button
           onClick={onNext}
-          className="flex-1 bg-blue-600 text-white hover:bg-blue-700 rounded-lg px-6 py-2.5 font-medium transition-colors inline-flex items-center justify-center gap-2"
+          className="flex-1 bg-indigo-600 text-white hover:bg-indigo-700 rounded-lg px-6 py-2.5 font-medium transition-colors inline-flex items-center justify-center gap-2"
         >
           Next
           <ArrowRight className="w-4 h-4" />
@@ -351,8 +351,8 @@ function StepApiMarketplaces({
   return (
     <div>
       <div className="text-center mb-6">
-        <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-5">
-          <Zap className="w-8 h-8 text-blue-600" />
+        <div className="w-16 h-16 bg-indigo-100 rounded-2xl flex items-center justify-center mx-auto mb-5">
+          <Zap className="w-8 h-8 text-indigo-600" />
         </div>
         <h2 className="text-xl font-bold text-gray-900 mb-2">
           Connect API Marketplaces (Optional)
@@ -377,7 +377,7 @@ function StepApiMarketplaces({
           <button
             onClick={onConnectEbay}
             disabled={connectingEbay}
-            className="text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 rounded-lg px-4 py-2 transition-colors disabled:opacity-50 inline-flex items-center gap-1.5"
+            className="text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700 rounded-lg px-4 py-2 transition-colors disabled:opacity-50 inline-flex items-center gap-1.5"
           >
             {connectingEbay ? 'Connecting...' : 'Connect eBay'}
             <ExternalLink className="w-3.5 h-3.5" />
@@ -398,7 +398,7 @@ function StepApiMarketplaces({
           <button
             onClick={onConnectEtsy}
             disabled={connectingEtsy}
-            className="text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 rounded-lg px-4 py-2 transition-colors disabled:opacity-50 inline-flex items-center gap-1.5"
+            className="text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700 rounded-lg px-4 py-2 transition-colors disabled:opacity-50 inline-flex items-center gap-1.5"
           >
             {connectingEtsy ? 'Connecting...' : 'Connect Etsy'}
             <ExternalLink className="w-3.5 h-3.5" />
@@ -419,7 +419,7 @@ function StepApiMarketplaces({
         </button>
         <button
           onClick={onComplete}
-          className="flex-1 bg-blue-600 text-white hover:bg-blue-700 rounded-lg px-6 py-2.5 font-medium transition-colors"
+          className="flex-1 bg-indigo-600 text-white hover:bg-indigo-700 rounded-lg px-6 py-2.5 font-medium transition-colors"
         >
           Get Started
         </button>

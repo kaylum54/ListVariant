@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
 import crypto from 'crypto';
-import { prisma } from '@tom-flips/database';
+import { prisma } from '@syncsellr/database';
 import { config } from '../config';
 import { ApiError } from '../utils/ApiError';
 import { ListingWithImages, PublishResult, MarketplaceAdapter } from './marketplace/types';

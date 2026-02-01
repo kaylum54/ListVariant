@@ -162,7 +162,7 @@ export default function ConnectionsPage() {
                       <button
                         onClick={() => handleConnect(platform.id)}
                         disabled={isLoading}
-                        className="h-9 px-4 rounded-lg text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 transition-colors inline-flex items-center gap-2 disabled:opacity-50"
+                        className="h-9 px-4 rounded-lg text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700 transition-colors inline-flex items-center gap-2 disabled:opacity-50"
                       >
                         {isLoading ? (
                           <>
@@ -191,17 +191,17 @@ export default function ConnectionsPage() {
           <h2 className="text-lg font-semibold text-gray-900">Browser-Based Marketplaces</h2>
         </div>
 
-        <div className="bg-blue-50 rounded-xl p-6 border border-blue-100">
+        <div className="bg-indigo-50 rounded-xl p-6 border border-indigo-100">
           <div className="flex items-start gap-4">
-            <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
-              <Puzzle className="w-5 h-5 text-blue-600" />
+            <div className="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center flex-shrink-0">
+              <Puzzle className="w-5 h-5 text-indigo-600" />
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-blue-900 mb-1">
+              <h3 className="font-semibold text-indigo-900 mb-1">
                 No connection needed
               </h3>
-              <p className="text-sm text-blue-700 leading-relaxed mb-4">
-                These platforms are handled by the Tom Flips browser extension. Just
+              <p className="text-sm text-indigo-700 leading-relaxed mb-4">
+                These platforms are handled by the SyncSellr browser extension. Just
                 make sure you&apos;re logged into each marketplace in your browser.
               </p>
 
@@ -219,7 +219,7 @@ export default function ConnectionsPage() {
 
               <button
                 onClick={() => setShowOnboarding(true)}
-                className="text-sm font-medium text-blue-600 hover:text-blue-700 inline-flex items-center gap-1"
+                className="text-sm font-medium text-indigo-600 hover:text-indigo-700 inline-flex items-center gap-1"
               >
                 View setup guide
                 <ExternalLink className="w-3.5 h-3.5" />

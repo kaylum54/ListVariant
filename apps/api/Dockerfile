@@ -13,11 +13,11 @@ RUN npm run build
 FROM base AS runner
 ENV NODE_ENV=production
 RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 tomflips
-USER tomflips
-COPY --from=builder --chown=tomflips:nodejs /app/dist ./dist
-COPY --from=builder --chown=tomflips:nodejs /app/package.json ./package.json
-COPY --from=builder --chown=tomflips:nodejs /app/package-lock.json ./package-lock.json
+RUN adduser --system --uid 1001 syncsellr
+USER syncsellr
+COPY --from=builder --chown=syncsellr:nodejs /app/dist ./dist
+COPY --from=builder --chown=syncsellr:nodejs /app/package.json ./package.json
+COPY --from=builder --chown=syncsellr:nodejs /app/package-lock.json ./package-lock.json
 RUN npm ci --omit=dev
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \

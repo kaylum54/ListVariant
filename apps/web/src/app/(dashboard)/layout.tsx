@@ -50,8 +50,8 @@ export default function DashboardLayout({
         }`}
       >
         <div className="flex items-center gap-2 h-16 px-6 border-b">
-          <div className="w-8 h-8 bg-blue-600 rounded-lg" />
-          <span className="font-bold text-xl">Tom Flips</span>
+          <div className="w-8 h-8 bg-indigo-600 rounded-lg" />
+          <span className="font-bold text-xl text-gray-900">SyncSellr</span>
         </div>
 
         <nav className="p-4 space-y-1">
@@ -64,8 +64,8 @@ export default function DashboardLayout({
                 href={item.href}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                   isActive
-                    ? 'bg-blue-50 text-blue-700'
-                    : 'text-gray-600 hover:bg-gray-100'
+                    ? 'bg-indigo-50 text-indigo-600'
+                    : 'text-gray-500 hover:bg-gray-50'
                 }`}
                 onClick={() => setSidebarOpen(false)}
               >
@@ -110,8 +110,8 @@ export default function DashboardLayout({
               <Menu className="w-6 h-6" />
             </button>
             <div className="flex items-center gap-2 ml-3">
-              <div className="w-6 h-6 bg-blue-600 rounded" />
-              <span className="font-bold">Tom Flips</span>
+              <div className="w-6 h-6 bg-indigo-600 rounded" />
+              <span className="font-bold">SyncSellr</span>
             </div>
           </div>
         </header>

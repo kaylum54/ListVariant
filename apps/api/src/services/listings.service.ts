@@ -1,4 +1,4 @@
-import { prisma } from '@tom-flips/database';
+import { prisma } from '@syncsellr/database';
 import { CreateListingInput, UpdateListingInput } from '../schemas/listing.schema';
 import { ApiError } from '../utils/ApiError';
 

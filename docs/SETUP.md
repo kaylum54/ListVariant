@@ -1,4 +1,4 @@
-# Tom Flips -- Developer Setup Guide
+# SyncSellr -- Developer Setup Guide
 
 ## Prerequisites
 
@@ -15,8 +15,8 @@ Optional:
 ## 1. Clone the Repository
 
 ```bash
-git clone https://github.com/kaylum54/tom-flips.git
-cd tom-flips
+git clone https://github.com/kaylum54/syncsellr.git
+cd syncsellr
 ```
 
 ---
@@ -40,7 +40,7 @@ docker compose up -d postgres redis
 ```
 
 This starts:
-- **PostgreSQL 15** on port `5432` (user: `tomflips`, password: `tomflips_dev`, db: `tomflips`)
+- **PostgreSQL 15** on port `5432` (user: `syncsellr`, password: `syncsellr_dev`, db: `syncsellr`)
 - **Redis 7** on port `6379`
 
 Verify they are running:
@@ -65,7 +65,7 @@ The defaults in `.env.example` work for local development. Edit `.env` to add ma
 
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `DATABASE_URL` | Yes | `postgresql://tomflips:tomflips_dev@localhost:5432/tomflips` | PostgreSQL connection string |
+| `DATABASE_URL` | Yes | `postgresql://syncsellr:syncsellr_dev@localhost:5432/syncsellr` | PostgreSQL connection string |
 | `REDIS_URL` | No | `redis://localhost:6379` | Redis URL (app works without it) |
 | `JWT_SECRET` | Yes | template value | Secret for signing access tokens. Use 32+ random chars in production |
 | `JWT_REFRESH_SECRET` | Yes | template value | Secret for signing refresh tokens. Use 32+ random chars in production |
@@ -129,7 +129,7 @@ This uses Turborepo to start all apps in parallel:
 See [docs/EXTENSION.md](./EXTENSION.md) for detailed instructions.
 
 Quick version:
-1. Run `npm run build --workspace=@tom-flips/extension` (or let `npm run dev` handle it)
+1. Run `npm run build --workspace=@syncsellr/extension` (or let `npm run dev` handle it)
 2. Open `chrome://extensions` and enable Developer Mode
 3. Click "Load unpacked" and select `apps/extension/dist/`
 
@@ -138,7 +138,7 @@ Quick version:
 ## Project Structure
 
 ```
-tom-flips/
+syncsellr/
 ├── apps/
 │   ├── api/              Express.js backend (port 4000)
 │   │   ├── src/
@@ -168,9 +168,9 @@ tom-flips/
 │       │   └── lib/           API client, storage, AutomationFramework
 │       └── dist/              built extension (load this in Chrome)
 ├── packages/
-│   ├── database/         Prisma schema + client (@tom-flips/database)
-│   ├── shared/           Shared types and utilities (@tom-flips/shared)
-│   └── ui/               Shared UI components (@tom-flips/ui)
+│   ├── database/         Prisma schema + client (@syncsellr/database)
+│   ├── shared/           Shared types and utilities (@syncsellr/shared)
+│   └── ui/               Shared UI components (@syncsellr/ui)
 ├── docs/                 Documentation and ADRs
 ├── docker-compose.yml    PostgreSQL + Redis + full stack
 ├── turbo.json            Turborepo task config
@@ -220,4 +220,4 @@ Change the `PORT` variable in `.env`, or stop the conflicting process.
 Make sure PostgreSQL is running: `docker compose up -d postgres`.
 
 **Extension not loading**
-Make sure you built the extension first (`npm run build --workspace=@tom-flips/extension`) and loaded the `apps/extension/dist/` directory in Chrome.
+Make sure you built the extension first (`npm run build --workspace=@syncsellr/extension`) and loaded the `apps/extension/dist/` directory in Chrome.

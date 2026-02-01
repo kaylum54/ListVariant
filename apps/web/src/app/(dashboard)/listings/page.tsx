@@ -27,7 +27,7 @@ export default function ListingsPage() {
         </div>
         <Link
           href="/listings/new"
-          className="inline-flex items-center gap-2 h-11 px-6 rounded-lg font-medium bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+          className="inline-flex items-center gap-2 h-11 px-6 rounded-lg font-medium bg-indigo-600 text-white hover:bg-indigo-700 transition-colors"
         >
           <Plus className="w-4 h-4" />
           New Listing
@@ -45,7 +45,7 @@ export default function ListingsPage() {
             onChange={(e) =>
               setFilters((prev) => ({ ...prev, search: e.target.value }))
             }
-            className="w-full h-11 pl-10 pr-4 rounded-lg border border-gray-300 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full h-11 pl-10 pr-4 rounded-lg border border-gray-300 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
         </div>
         <select
@@ -53,7 +53,7 @@ export default function ListingsPage() {
           onChange={(e) =>
             setFilters((prev) => ({ ...prev, status: e.target.value }))
           }
-          className="h-11 px-4 rounded-lg border border-gray-300 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="h-11 px-4 rounded-lg border border-gray-300 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         >
           <option value="all">All Status</option>
           <option value="draft">Draft</option>
@@ -81,7 +81,7 @@ export default function ListingsPage() {
             <p className="text-lg mb-2">No listings found</p>
             <Link
               href="/listings/new"
-              className="text-blue-600 hover:underline"
+              className="text-indigo-600 hover:underline"
             >
               Create your first listing
             </Link>
@@ -151,7 +151,7 @@ export default function ListingsPage() {
                         {listing.marketplaceListings?.map((ml: any) => (
                           <span
                             key={ml.id}
-                            className="text-xs px-2 py-0.5 rounded bg-blue-50 text-blue-600"
+                            className="text-xs px-2 py-0.5 rounded bg-indigo-50 text-indigo-600"
                           >
                             {ml.marketplace}
                           </span>
@@ -166,7 +166,7 @@ export default function ListingsPage() {
                       <div className="flex items-center justify-end gap-2">
                         <Link
                           href={`/listings/${listing.id}`}
-                          className="p-1.5 text-gray-400 hover:text-blue-600 rounded"
+                          className="p-1.5 text-gray-400 hover:text-indigo-600 rounded"
                           title="Edit"
                         >
                           <Edit className="w-4 h-4" />
@@ -199,7 +199,7 @@ export default function ListingsPage() {
                   key={i}
                   className={`w-8 h-8 rounded text-sm font-medium ${
                     pagination.page === i + 1
-                      ? 'bg-blue-600 text-white'
+                      ? 'bg-indigo-600 text-white'
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
                 >

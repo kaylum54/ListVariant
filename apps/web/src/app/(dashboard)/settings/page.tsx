@@ -47,7 +47,7 @@ export default function SettingsPage() {
           </span>{' '}
           plan.
         </p>
-        <button className="h-11 px-6 rounded-lg font-medium bg-blue-600 text-white hover:bg-blue-700 transition-colors">
+        <button className="h-11 px-6 rounded-lg font-medium bg-indigo-600 text-white hover:bg-indigo-700 transition-colors">
           Upgrade Plan
         </button>
       </section>

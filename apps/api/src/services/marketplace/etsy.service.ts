@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 import crypto from 'crypto';
-import { prisma } from '@tom-flips/database';
+import { prisma } from '@syncsellr/database';
 import { config } from '../../config';
 import { ApiError } from '../../utils/ApiError';
 import { etsyCircuitBreaker } from '../../lib/circuitBreaker';

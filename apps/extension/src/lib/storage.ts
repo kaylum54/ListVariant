@@ -4,7 +4,7 @@ export class Storage {
       try {
         chrome.storage.local.get([key], (result) => {
           if (chrome.runtime.lastError) {
-            console.error('[TomFlips Storage] get error:', chrome.runtime.lastError.message);
+            console.error('[SyncSellr Storage] get error:', chrome.runtime.lastError.message);
             resolve(null);
             return;
           }
@@ -12,7 +12,7 @@ export class Storage {
         });
       } catch (err) {
         // Extension context may be invalidated
-        console.error('[TomFlips Storage] get threw:', err);
+        console.error('[SyncSellr Storage] get threw:', err);
         resolve(null);
       }
     });
@@ -23,12 +23,12 @@ export class Storage {
       try {
         chrome.storage.local.set({ [key]: value }, () => {
           if (chrome.runtime.lastError) {
-            console.error('[TomFlips Storage] set error:', chrome.runtime.lastError.message);
+            console.error('[SyncSellr Storage] set error:', chrome.runtime.lastError.message);
           }
           resolve();
         });
       } catch (err) {
-        console.error('[TomFlips Storage] set threw:', err);
+        console.error('[SyncSellr Storage] set threw:', err);
         resolve();
       }
     });
@@ -39,12 +39,12 @@ export class Storage {
       try {
         chrome.storage.local.remove(key, () => {
           if (chrome.runtime.lastError) {
-            console.error('[TomFlips Storage] remove error:', chrome.runtime.lastError.message);
+            console.error('[SyncSellr Storage] remove error:', chrome.runtime.lastError.message);
           }
           resolve();
         });
       } catch (err) {
-        console.error('[TomFlips Storage] remove threw:', err);
+        console.error('[SyncSellr Storage] remove threw:', err);
         resolve();
       }
     });

@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
-import { prisma } from '@tom-flips/database';
+import { prisma } from '@syncsellr/database';
 import { config } from '../config';
 import { ApiError } from '../utils/ApiError';
 

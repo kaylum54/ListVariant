@@ -1,4 +1,4 @@
-# Tom Flips Chrome Extension
+# SyncSellr Chrome Extension
 
 The Chrome extension handles cross-listing to marketplaces that lack public APIs. It uses Manifest V3 with per-platform content scripts that automate form filling through browser automation.
 
@@ -73,7 +73,7 @@ eBay and Etsy are **not** handled by the extension -- they use server-side API i
 ### One-time build
 
 ```bash
-npm run build --workspace=@tom-flips/extension
+npm run build --workspace=@syncsellr/extension
 ```
 
 Or from within the extension directory:
@@ -111,14 +111,14 @@ After both passes, it copies static assets:
 2. Enable **Developer mode** (toggle in the top-right).
 3. Click **Load unpacked**.
 4. Select the `apps/extension/dist/` directory.
-5. The "Tom Flips" extension should appear with its icon.
+5. The "SyncSellr" extension should appear with its icon.
 
 ### After making changes
 
 If you are using watch mode, Chrome does not auto-reload the extension. You need to:
 
 1. Go to `chrome://extensions`.
-2. Click the refresh icon on the Tom Flips extension card.
+2. Click the refresh icon on the SyncSellr extension card.
 3. If content scripts changed, also reload any open marketplace tabs.
 
 ---
@@ -136,7 +136,7 @@ If you are using watch mode, Chrome does not auto-reload the extension. You need
 
 1. Open `http://localhost:3000/login` and sign in.
    - The `auth-bridge` content script automatically syncs your JWT to the extension.
-2. Click the Tom Flips extension icon in the Chrome toolbar.
+2. Click the SyncSellr extension icon in the Chrome toolbar.
 3. The popup should show "Connected as ..." and list your listings.
 4. Select a listing from the dropdown.
 5. Click "Facebook" or "Gumtree" (or whichever platform button is available).
@@ -153,7 +153,7 @@ If you are using watch mode, Chrome does not auto-reload the extension. You need
 
 **Content script not filling the form**
 - Open the browser DevTools console on the marketplace tab.
-- Look for `[TomFlips:<platform>]` log messages.
+- Look for `[SyncSellr:<platform>]` log messages.
 - The marketplace may have updated their DOM selectors. Check the content script's CSS selectors against the actual page.
 
 **Images not uploading**

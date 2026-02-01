@@ -39,8 +39,8 @@ export function CrossListReminderModal({
             className="bg-white rounded-2xl shadow-xl p-6 max-w-md w-full mx-4"
           >
             <div className="flex items-start gap-3 mb-4">
-              <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                <Info className="w-5 h-5 text-blue-600" />
+              <div className="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                <Info className="w-5 h-5 text-indigo-600" />
               </div>
               <div>
                 <h3 className="text-lg font-bold text-gray-900">Quick Reminder</h3>
@@ -56,7 +56,7 @@ export function CrossListReminderModal({
               href={platform.loginUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-blue-600 hover:text-blue-700 mb-5"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-indigo-600 hover:text-indigo-700 mb-5"
             >
               Open {platform.name}
               <ExternalLink className="w-3.5 h-3.5" />
@@ -67,7 +67,7 @@ export function CrossListReminderModal({
                 onClick={() => setDontShowAgain(!dontShowAgain)}
                 className={`w-4 h-4 rounded flex items-center justify-center border-2 transition-colors ${
                   dontShowAgain
-                    ? 'bg-blue-600 border-blue-600'
+                    ? 'bg-indigo-600 border-indigo-600'
                     : 'border-gray-300 hover:border-gray-400'
                 }`}
               >
@@ -91,7 +91,7 @@ export function CrossListReminderModal({
               </button>
               <button
                 onClick={() => onContinue(dontShowAgain)}
-                className="flex-1 bg-blue-600 text-white hover:bg-blue-700 rounded-lg px-4 py-2.5 font-medium text-sm transition-colors"
+                className="flex-1 bg-indigo-600 text-white hover:bg-indigo-700 rounded-lg px-4 py-2.5 font-medium text-sm transition-colors"
               >
                 Continue
               </button>

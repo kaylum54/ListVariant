@@ -29,13 +29,13 @@ export default function LoginPage() {
       <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-xl shadow-lg">
         <div>
           <div className="flex justify-center mb-4">
-            <div className="w-12 h-12 bg-blue-600 rounded-xl" />
+            <div className="w-12 h-12 bg-indigo-600 rounded-xl" />
           </div>
           <h2 className="text-3xl font-bold text-center text-gray-900">
             Welcome back
           </h2>
           <p className="mt-2 text-center text-gray-600">
-            Sign in to your Tom Flips account
+            Sign in to your SyncSellr account
           </p>
         </div>
 
@@ -56,7 +56,7 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full h-11 px-4 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full h-11 px-4 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               placeholder="you@example.com"
             />
           </div>
@@ -71,7 +71,7 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full h-11 px-4 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full h-11 px-4 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               placeholder="Enter your password"
             />
           </div>
@@ -79,7 +79,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full h-11 px-6 rounded-lg font-medium bg-blue-600 text-white hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:pointer-events-none inline-flex items-center justify-center"
+            className="w-full h-11 px-6 rounded-lg font-medium bg-indigo-600 text-white hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:pointer-events-none inline-flex items-center justify-center"
           >
             {isLoading ? 'Signing in...' : 'Sign in'}
           </button>
@@ -87,7 +87,7 @@ export default function LoginPage() {
 
         <p className="text-center text-gray-600">
           Don't have an account?{' '}
-          <Link href="/register" className="text-blue-600 hover:underline font-medium">
+          <Link href="/register" className="text-indigo-600 hover:underline font-medium">
             Sign up
           </Link>
         </p>

@@ -1,5 +1,5 @@
 {
-  "name": "@tom-flips/web",
+  "name": "@syncsellr/web",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -13,8 +13,8 @@
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
     "@tanstack/react-query": "^5.17.0",
-    "@tom-flips/shared": "*",
-    "@tom-flips/ui": "*",
+    "@syncsellr/shared": "*",
+    "@syncsellr/ui": "*",
     "axios": "^1.6.5",
     "framer-motion": "^12.29.2",
     "lucide-react": "^0.344.0",

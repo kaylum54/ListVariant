@@ -58,7 +58,7 @@ export default function DashboardPage() {
             <h2 className="text-lg font-semibold">Recent Listings</h2>
             <Link
               href="/listings"
-              className="text-sm text-blue-600 hover:underline"
+              className="text-sm text-indigo-600 hover:underline"
             >
               View all
             </Link>
@@ -79,7 +79,7 @@ export default function DashboardPage() {
               <p>No listings yet</p>
               <Link
                 href="/listings/new"
-                className="text-blue-600 hover:underline text-sm mt-1 inline-block"
+                className="text-indigo-600 hover:underline text-sm mt-1 inline-block"
               >
                 Create your first listing
               </Link>
@@ -129,7 +129,7 @@ export default function DashboardPage() {
             <div className="space-y-3">
               <Link
                 href="/listings/new"
-                className="block w-full p-3 text-left rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors"
+                className="block w-full p-3 text-left rounded-lg border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 transition-colors"
               >
                 <p className="font-medium text-gray-900">New Listing</p>
                 <p className="text-sm text-gray-500">
@@ -138,7 +138,7 @@ export default function DashboardPage() {
               </Link>
               <Link
                 href="/connections"
-                className="block w-full p-3 text-left rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors"
+                className="block w-full p-3 text-left rounded-lg border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 transition-colors"
               >
                 <p className="font-medium text-gray-900">
                   Connect Marketplace
@@ -184,7 +184,7 @@ function StatCard({
   color: string;
 }) {
   const colorClasses: Record<string, string> = {
-    blue: 'bg-blue-50 text-blue-600',
+    blue: 'bg-indigo-50 text-indigo-600',
     green: 'bg-green-50 text-green-600',
     yellow: 'bg-yellow-50 text-yellow-600',
     purple: 'bg-purple-50 text-purple-600',

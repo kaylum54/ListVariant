@@ -237,25 +237,25 @@ class VintedAutomation extends AutomationFramework {
 // --- Initialize & Message listener ---
 const automation = new VintedAutomation();
 
-console.log('[TomFlips:vinted] Content script loaded on:', window.location.href);
+console.log('[SyncSellr:vinted] Content script loaded on:', window.location.href);
 
 // Initialize the selector registry asynchronously
 automation.initRegistry().then((reg) => {
-  console.log(`[TomFlips:vinted] SelectorRegistry ready v${reg.getVersion()}`);
+  console.log(`[SyncSellr:vinted] SelectorRegistry ready v${reg.getVersion()}`);
 }).catch((err) => {
-  console.warn('[TomFlips:vinted] SelectorRegistry init failed, using bundled defaults:', err);
+  console.warn('[SyncSellr:vinted] SelectorRegistry init failed, using bundled defaults:', err);
 });
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
-  console.log('[TomFlips:vinted] Message received:', message.type);
+  console.log('[SyncSellr:vinted] Message received:', message.type);
   if (message.type === 'CREATE_LISTING' && (!message.platform || message.platform === 'vinted')) {
     automation.createListing(message.listing)
       .then((result) => {
-        console.log('[TomFlips:vinted] createListing result:', result);
+        console.log('[SyncSellr:vinted] createListing result:', result);
         sendResponse(result);
       })
       .catch((error) => {
-        console.error('[TomFlips:vinted] createListing error:', error);
+        console.error('[SyncSellr:vinted] createListing error:', error);
         sendResponse({ success: false, error: error?.message || String(error) });
       });
     return true;

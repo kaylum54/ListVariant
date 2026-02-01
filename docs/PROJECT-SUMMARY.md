@@ -1,4 +1,4 @@
-# Project Summary: Tom Flips
+# Project Summary: SyncSellr
 
 **Generated:** January 31, 2026
 **Summary Type:** Checkpoint
@@ -9,7 +9,7 @@
 ## 1. Project Overview
 
 ### What This Project Is
-Tom Flips is a cross-listing platform for furniture resellers. Users create a product listing once — with title, description, price, images, and condition — and the platform publishes it to up to 7 online marketplaces simultaneously. Two platforms (eBay, Etsy) use API integrations with OAuth; five platforms (Facebook Marketplace, Gumtree, Vinted, Depop, Poshmark) use browser automation via a Chrome extension that fills in listing forms automatically.
+SyncSellr is a cross-listing platform for furniture resellers. Users create a product listing once — with title, description, price, images, and condition — and the platform publishes it to up to 7 online marketplaces simultaneously. Two platforms (eBay, Etsy) use API integrations with OAuth; five platforms (Facebook Marketplace, Gumtree, Vinted, Depop, Poshmark) use browser automation via a Chrome extension that fills in listing forms automatically.
 
 The project is a Turborepo monorepo containing an Express API backend, a Next.js frontend, a Chrome MV3 extension, and shared packages for database access, types, and UI components.
 
@@ -28,7 +28,7 @@ UK-based furniture resellers who buy wholesale or secondhand furniture and resel
 |-------|------------|-------|
 | Frontend | Next.js 14, React 18, TailwindCSS | Landing page + dashboard |
 | Backend | Express.js 4, TypeScript | REST API on port 4000 |
-| Database | PostgreSQL 15, Prisma ORM | Via `@tom-flips/database` shared package |
+| Database | PostgreSQL 15, Prisma ORM | Via `@syncsellr/database` shared package |
 | Extension | Chrome MV3, Vite | Background service worker + content scripts |
 | Monorepo | Turborepo, npm workspaces | Build orchestration and caching |
 | State | Zustand (frontend), React Query | Server state + client state |
@@ -99,7 +99,7 @@ User → Web App → API → eBay API / Etsy API (OAuth)
 
 ### File Structure
 ```
-tom-flips/
+syncsellr/
 ├── apps/
 │   ├── api/                    Express.js API (port 4000)
 │   │   ├── src/
@@ -128,9 +128,9 @@ tom-flips/
 │       │   └── utils/          DOM helpers, delay utilities
 │       └── build.mjs           Custom Vite build (IIFE content scripts)
 ├── packages/
-│   ├── database/               Prisma client (@tom-flips/database)
-│   ├── shared/                 Shared types & utils (@tom-flips/shared)
-│   └── ui/                     Shared React components (@tom-flips/ui)
+│   ├── database/               Prisma client (@syncsellr/database)
+│   ├── shared/                 Shared types & utils (@syncsellr/shared)
+│   └── ui/                     Shared React components (@syncsellr/ui)
 ├── docs/
 │   ├── architecture/           ADR-001 through ADR-005
 │   ├── API.md                  API endpoint documentation
@@ -263,7 +263,7 @@ tom-flips/
 ### Environment Variables Required
 | Variable | Purpose | Example |
 |----------|---------|---------|
-| `DATABASE_URL` | PostgreSQL connection | `postgresql://user:pass@localhost:5432/tomflips` |
+| `DATABASE_URL` | PostgreSQL connection | `postgresql://user:pass@localhost:5432/syncsellr` |
 | `REDIS_URL` | Redis (optional) | `redis://localhost:6379` |
 | `JWT_SECRET` | Access token signing (min 32 chars) | Generated via `crypto.randomBytes(64)` |
 | `JWT_REFRESH_SECRET` | Refresh token signing (min 32 chars) | Generated via `crypto.randomBytes(64)` |
