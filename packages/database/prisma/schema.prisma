@@ -18,10 +18,14 @@ model User {
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @updatedAt @map("updated_at")
 
+  onboardingCompletedAt  DateTime? @map("onboarding_completed_at")
+  crossListReminders     Json?     @default("{}") @map("cross_list_reminders")
+
   listings              Listing[]
   marketplaceConnections MarketplaceConnection[]
   sales                 Sale[]
 
+  @@index([onboardingCompletedAt])
   @@map("users")
 }
 

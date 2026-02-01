@@ -1,5 +1,6 @@
 import { delay, randomDelay } from '../utils/delay';
 import { waitForElement } from '../utils/dom';
+import { checkLoginStatus, showLoginError, showSuccessToast } from '../lib/loginDetection';
 
 console.log('[TomFlips] Facebook content script loaded on:', window.location.href);
 
@@ -29,6 +30,14 @@ async function createListing(listing: any) {
   });
 
   try {
+    // Check login status before proceeding
+    const loginCheck = await checkLoginStatus('facebook');
+    if (!loginCheck.isLoggedIn) {
+      showLoginError('facebook');
+      chrome.runtime.sendMessage({ type: 'REPORT_LISTING_STATUS', platform: 'facebook', status: 'error', error: 'Not logged in' });
+      return { success: false, error: 'Not logged in' };
+    }
+
     // Step 1: Make sure we're on the create page
     console.log('[TomFlips] Step 1: Navigate to create listing');
     await navigateToCreateListing();
@@ -77,6 +86,7 @@ async function createListing(listing: any) {
     await delay(randomDelay(500, 1000));
 
     console.log('[TomFlips] All fields filled. Review and publish manually.');
+    showSuccessToast('Facebook Marketplace');
     return { success: true };
   } catch (error: any) {
     console.error('[TomFlips] Error during listing creation:', error.message);

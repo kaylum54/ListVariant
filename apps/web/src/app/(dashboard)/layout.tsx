@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
+import { useOnboarding } from '@/hooks/useOnboarding';
+import { OnboardingModal } from '@/components/onboarding/OnboardingModal';
 import {
   LayoutDashboard,
   Package,
@@ -29,6 +31,7 @@ export default function DashboardLayout({
   const pathname = usePathname();
   const { user, logout } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { showOnboarding, setShowOnboarding, completeOnboarding } = useOnboarding();
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -115,6 +118,12 @@ export default function DashboardLayout({
 
         <main className="p-6 lg:p-8">{children}</main>
       </div>
+
+      <OnboardingModal
+        isOpen={showOnboarding}
+        onClose={() => setShowOnboarding(false)}
+        onComplete={completeOnboarding}
+      />
     </div>
   );
 }

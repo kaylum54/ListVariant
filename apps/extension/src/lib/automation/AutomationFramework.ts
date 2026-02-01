@@ -1,6 +1,7 @@
 import { delay, randomDelay } from '../../utils/delay';
 import { waitForElement } from '../../utils/dom';
 import { SelectorRegistry } from '../selectors/SelectorRegistry';
+import { checkLoginStatus, showLoginError, showSuccessToast, PLATFORM_CONFIGS } from '../loginDetection';
 
 export interface ListingData {
   id: string;
@@ -34,6 +35,14 @@ export abstract class AutomationFramework {
         imageCount: data.images?.length || 0,
       });
 
+      // Check login status before proceeding
+      const loginCheck = await checkLoginStatus(this.platform);
+      if (!loginCheck.isLoggedIn) {
+        showLoginError(this.platform);
+        this.reportFailure(data.id, `User not logged into ${this.platform}`);
+        return { success: false, error: `User not logged into ${this.platform}` };
+      }
+
       await this.verifyLoggedIn();
       this.log('Login verified');
 
@@ -57,6 +66,8 @@ export abstract class AutomationFramework {
 
       this.log('All fields filled. Review and publish manually.');
       this.reportSuccess(data.id);
+      const platformConfig = PLATFORM_CONFIGS[this.platform];
+      showSuccessToast(platformConfig?.name || this.platform);
       return { success: true };
     } catch (error: any) {
       const errorMessage = error?.message || String(error) || 'Unknown error';

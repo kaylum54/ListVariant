@@ -12,7 +12,7 @@ router.use(authenticate);
 router.get('/', async (req: AuthRequest, res, next) => {
   try {
     const connections = await prisma.marketplaceConnection.findMany({
-      where: { userId: req.userId! },
+      where: { userId: req.userId!, marketplace: { in: ['ebay', 'etsy'] } },
     });
     res.json(connections);
   } catch (error) {
@@ -20,11 +20,20 @@ router.get('/', async (req: AuthRequest, res, next) => {
   }
 });
 
-// Connect a marketplace (for extension-based marketplaces like Facebook/Gumtree)
+// Connect a marketplace (for OAuth-based marketplaces like eBay/Etsy)
 router.post('/:marketplace/connect', async (req: AuthRequest, res, next) => {
   try {
     const { marketplace } = req.params;
-    const validMarketplaces = ['ebay', 'facebook', 'gumtree', 'etsy', 'vinted', 'depop', 'poshmark'];
+
+    const browserPlatforms = ['facebook', 'gumtree', 'vinted', 'depop', 'poshmark'];
+    if (browserPlatforms.includes(marketplace)) {
+      return res.status(400).json({
+        error: 'Browser-based platforms do not require a connection. Install the extension and log in directly.',
+        deprecated: true
+      });
+    }
+
+    const validMarketplaces = ['ebay', 'etsy'];
     if (!validMarketplaces.includes(marketplace)) {
       return res.status(400).json({ error: 'Invalid marketplace' });
     }
@@ -55,6 +64,11 @@ router.post('/:marketplace/connect', async (req: AuthRequest, res, next) => {
 // Disconnect a marketplace
 router.post('/:marketplace/disconnect', async (req: AuthRequest, res, next) => {
   try {
+    const browserPlatforms = ['facebook', 'gumtree', 'vinted', 'depop', 'poshmark'];
+    if (browserPlatforms.includes(req.params.marketplace)) {
+      return res.status(400).json({ error: 'Browser-based platforms cannot be disconnected' });
+    }
+
     const { marketplace } = req.params;
 
     const connection = await prisma.marketplaceConnection.findUnique({

@@ -1,6 +1,7 @@
 import { delay, randomDelay } from '../utils/delay';
 import { waitForElement } from '../utils/dom';
 import { SelectorRegistry } from '../lib/selectors/SelectorRegistry';
+import { checkLoginStatus, showLoginError, showSuccessToast } from '../lib/loginDetection';
 
 // Bundled fallback selectors — used if registry is not initialized
 const SELECTORS = {
@@ -105,6 +106,14 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 async function createListing(listing: any) {
   try {
+    // Check login status before proceeding
+    const loginCheck = await checkLoginStatus('gumtree');
+    if (!loginCheck.isLoggedIn) {
+      showLoginError('gumtree');
+      chrome.runtime.sendMessage({ type: 'REPORT_LISTING_STATUS', platform: 'gumtree', status: 'error', error: 'Not logged in' });
+      return { success: false, error: 'Not logged in' };
+    }
+
     if (!window.location.href.includes('/post-ad')) {
       window.location.href = 'https://www.gumtree.com/post-ad';
       return { success: false, error: 'Navigating to post page - please retry' };
@@ -147,6 +156,7 @@ async function createListing(listing: any) {
       status: { success: true },
     });
 
+    showSuccessToast('Gumtree');
     return { success: true };
   } catch (error: any) {
     chrome.runtime.sendMessage({

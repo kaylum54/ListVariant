@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { ExternalLink, Loader2, CheckCircle2 } from 'lucide-react';
+import { ExternalLink, Loader2, CheckCircle2, Puzzle, Info } from 'lucide-react';
 import { api } from '@/lib/api';
+import { useOnboarding } from '@/hooks/useOnboarding';
 
 interface Connection {
   id: string;
@@ -10,70 +11,36 @@ interface Connection {
   status: string;
 }
 
-const marketplaceConfig = [
+const API_PLATFORMS = [
   {
     id: 'ebay',
     name: 'eBay',
-    description: 'List items on eBay UK through the official API',
+    description: 'List items on eBay UK through the official API. Faster and more reliable than browser automation.',
     color: 'bg-blue-500',
-    connectType: 'oauth' as const,
-    loginUrl: '',
+    letter: 'E',
   },
   {
     id: 'etsy',
     name: 'Etsy',
-    description: 'List handmade and vintage items via the Etsy API',
+    description: 'List handmade and vintage items via the Etsy API. Supports all listing fields.',
     color: 'bg-orange-500',
-    connectType: 'oauth' as const,
-    loginUrl: '',
+    letter: 'E',
   },
-  {
-    id: 'facebook',
-    name: 'Facebook Marketplace',
-    description: 'Post to Facebook Marketplace via Chrome extension',
-    color: 'bg-blue-700',
-    connectType: 'browser' as const,
-    loginUrl: 'https://www.facebook.com/login',
-  },
-  {
-    id: 'gumtree',
-    name: 'Gumtree',
-    description: 'Post to Gumtree via Chrome extension',
-    color: 'bg-green-600',
-    connectType: 'browser' as const,
-    loginUrl: 'https://www.gumtree.com/login',
-  },
-  {
-    id: 'vinted',
-    name: 'Vinted',
-    description: 'List items on Vinted via Chrome extension',
-    color: 'bg-teal-500',
-    connectType: 'browser' as const,
-    loginUrl: 'https://www.vinted.co.uk/member/login',
-  },
-  {
-    id: 'depop',
-    name: 'Depop',
-    description: 'List items on Depop via Chrome extension',
-    color: 'bg-red-500',
-    connectType: 'browser' as const,
-    loginUrl: 'https://www.depop.com/login',
-  },
-  {
-    id: 'poshmark',
-    name: 'Poshmark',
-    description: 'List items on Poshmark via Chrome extension',
-    color: 'bg-pink-500',
-    connectType: 'browser' as const,
-    loginUrl: 'https://poshmark.co.uk/login',
-  },
+];
+
+const BROWSER_PLATFORMS = [
+  { id: 'facebook', name: 'Facebook', color: 'bg-blue-700', textColor: 'text-blue-700', bgLight: 'bg-blue-50' },
+  { id: 'gumtree', name: 'Gumtree', color: 'bg-green-600', textColor: 'text-green-700', bgLight: 'bg-green-50' },
+  { id: 'vinted', name: 'Vinted', color: 'bg-teal-500', textColor: 'text-teal-700', bgLight: 'bg-teal-50' },
+  { id: 'depop', name: 'Depop', color: 'bg-red-500', textColor: 'text-red-700', bgLight: 'bg-red-50' },
+  { id: 'poshmark', name: 'Poshmark', color: 'bg-pink-500', textColor: 'text-pink-700', bgLight: 'bg-pink-50' },
 ];
 
 export default function ConnectionsPage() {
   const [connections, setConnections] = useState<Connection[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
-  const [pendingConfirm, setPendingConfirm] = useState<string | null>(null);
+  const { setShowOnboarding } = useOnboarding();
 
   const fetchConnections = useCallback(async () => {
     try {
@@ -106,34 +73,12 @@ export default function ConnectionsPage() {
   };
 
   const handleConnect = async (marketplaceId: string) => {
-    const marketplace = marketplaceConfig.find((m) => m.id === marketplaceId);
-    if (!marketplace) return;
-
-    if (marketplace.connectType === 'oauth') {
-      setActionLoading(marketplaceId);
-      try {
-        const { data } = await api.get(`/connections/${marketplaceId}/auth-url`);
-        window.open(data.url, '_blank', 'noopener,noreferrer');
-      } catch (err) {
-        console.error('Failed to get auth URL:', err);
-      } finally {
-        setActionLoading(null);
-      }
-    } else {
-      // Facebook/Gumtree: Open login page, then ask user to confirm
-      window.open(marketplace.loginUrl, '_blank', 'noopener,noreferrer');
-      setPendingConfirm(marketplaceId);
-    }
-  };
-
-  const handleConfirmConnection = async (marketplaceId: string) => {
     setActionLoading(marketplaceId);
     try {
-      await api.post(`/connections/${marketplaceId}/connect`);
-      await fetchConnections();
-      setPendingConfirm(null);
+      const { data } = await api.get(`/connections/${marketplaceId}/auth-url`);
+      window.open(data.url, '_blank', 'noopener,noreferrer');
     } catch (err) {
-      console.error('Failed to confirm connection:', err);
+      console.error('Failed to get auth URL:', err);
     } finally {
       setActionLoading(null);
     }
@@ -144,7 +89,6 @@ export default function ConnectionsPage() {
     try {
       await api.post(`/connections/${marketplaceId}/disconnect`);
       await fetchConnections();
-      setPendingConfirm(null);
     } catch (err) {
       console.error('Failed to disconnect:', err);
     } finally {
@@ -153,7 +97,7 @@ export default function ConnectionsPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Connections</h1>
         <p className="text-gray-600">
@@ -161,126 +105,129 @@ export default function ConnectionsPage() {
         </p>
       </div>
 
-      <div className="grid gap-6">
-        {marketplaceConfig.map((marketplace) => {
-          const connected = isConnected(marketplace.id);
-          const isLoading = actionLoading === marketplace.id;
-          const isPendingConfirm = pendingConfirm === marketplace.id;
+      {/* Section 1: API Integrations */}
+      <section>
+        <div className="mb-4">
+          <h2 className="text-lg font-semibold text-gray-900">API Integrations</h2>
+          <p className="text-sm text-gray-500">
+            These marketplaces use official APIs for faster, more reliable listings.
+          </p>
+        </div>
 
-          return (
-            <div
-              key={marketplace.id}
-              className="bg-white rounded-xl border p-6"
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div
-                    className={`w-12 h-12 ${marketplace.color} rounded-xl flex items-center justify-center text-white font-bold text-lg`}
-                  >
-                    {marketplace.name.charAt(0)}
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900">
-                      {marketplace.name}
-                    </h3>
-                    <p className="text-sm text-gray-500">
-                      {marketplace.description}
-                    </p>
-                  </div>
-                </div>
+        <div className="grid gap-4">
+          {API_PLATFORMS.map((platform) => {
+            const connected = isConnected(platform.id);
+            const isLoading = actionLoading === platform.id;
 
-                <div className="flex items-center gap-3">
-                  {loading ? (
-                    <Loader2 className="w-5 h-5 animate-spin text-gray-400" />
-                  ) : connected ? (
-                    <>
-                      <span className="text-sm text-green-600 font-medium flex items-center gap-1.5">
-                        <span className="w-2 h-2 bg-green-500 rounded-full" />
-                        Connected
-                      </span>
-                      <button
-                        onClick={() => handleDisconnect(marketplace.id)}
-                        disabled={isLoading}
-                        className="h-9 px-4 rounded-lg text-sm font-medium border border-gray-200 hover:bg-gray-50 transition-colors disabled:opacity-50"
-                      >
-                        {isLoading ? 'Disconnecting...' : 'Disconnect'}
-                      </button>
-                    </>
-                  ) : (
-                    <button
-                      onClick={() => handleConnect(marketplace.id)}
-                      disabled={isLoading}
-                      className="h-9 px-4 rounded-lg text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 transition-colors inline-flex items-center gap-2 disabled:opacity-50"
+            return (
+              <div
+                key={platform.id}
+                className="bg-white rounded-xl border border-gray-200 p-6"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div
+                      className={`w-12 h-12 ${platform.color} rounded-xl flex items-center justify-center text-white font-bold text-lg`}
                     >
-                      {isLoading ? (
-                        <>
-                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                          Connecting...
-                        </>
-                      ) : (
-                        <>
-                          {marketplace.connectType === 'oauth'
-                            ? 'Sign in'
-                            : 'Log in'}
-                          <ExternalLink className="w-3.5 h-3.5" />
-                        </>
-                      )}
-                    </button>
-                  )}
+                      {platform.letter}
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900">
+                        {platform.name}
+                      </h3>
+                      <p className="text-sm text-gray-500">
+                        {platform.description}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 flex-shrink-0 ml-4">
+                    {loading ? (
+                      <Loader2 className="w-5 h-5 animate-spin text-gray-400" />
+                    ) : connected ? (
+                      <>
+                        <span className="text-sm text-green-600 font-medium flex items-center gap-1.5">
+                          <span className="w-2 h-2 bg-green-500 rounded-full" />
+                          Connected
+                        </span>
+                        <button
+                          onClick={() => handleDisconnect(platform.id)}
+                          disabled={isLoading}
+                          className="h-9 px-4 rounded-lg text-sm font-medium border border-gray-200 hover:bg-gray-50 transition-colors disabled:opacity-50"
+                        >
+                          {isLoading ? 'Disconnecting...' : 'Disconnect'}
+                        </button>
+                      </>
+                    ) : (
+                      <button
+                        onClick={() => handleConnect(platform.id)}
+                        disabled={isLoading}
+                        className="h-9 px-4 rounded-lg text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 transition-colors inline-flex items-center gap-2 disabled:opacity-50"
+                      >
+                        {isLoading ? (
+                          <>
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            Connecting...
+                          </>
+                        ) : (
+                          <>
+                            Connect
+                            <ExternalLink className="w-3.5 h-3.5" />
+                          </>
+                        )}
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
+            );
+          })}
+        </div>
+      </section>
 
-              {/* Confirm connection prompt for browser-based marketplaces */}
-              {isPendingConfirm && !connected && (
-                <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
-                  <p className="text-sm text-amber-800 mb-3">
-                    A new tab has been opened for you to sign into{' '}
-                    <strong>{marketplace.name}</strong>. Once you&apos;re logged
-                    in, click the button below to confirm.
-                  </p>
-                  <div className="flex gap-3">
-                    <button
-                      onClick={() => handleConfirmConnection(marketplace.id)}
-                      disabled={isLoading}
-                      className="h-9 px-4 rounded-lg text-sm font-medium bg-green-600 text-white hover:bg-green-700 transition-colors inline-flex items-center gap-2 disabled:opacity-50"
-                    >
-                      {isLoading ? (
-                        <>
-                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                          Confirming...
-                        </>
-                      ) : (
-                        <>
-                          <CheckCircle2 className="w-3.5 h-3.5" />
-                          I&apos;ve signed in
-                        </>
-                      )}
-                    </button>
-                    <button
-                      onClick={() => setPendingConfirm(null)}
-                      className="h-9 px-4 rounded-lg text-sm font-medium border border-gray-200 hover:bg-gray-50 transition-colors"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              )}
+      {/* Section 2: Browser-Based Marketplaces */}
+      <section>
+        <div className="mb-4">
+          <h2 className="text-lg font-semibold text-gray-900">Browser-Based Marketplaces</h2>
+        </div>
+
+        <div className="bg-blue-50 rounded-xl p-6 border border-blue-100">
+          <div className="flex items-start gap-4">
+            <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+              <Puzzle className="w-5 h-5 text-blue-600" />
             </div>
-          );
-        })}
-      </div>
+            <div className="flex-1">
+              <h3 className="font-semibold text-blue-900 mb-1">
+                No connection needed
+              </h3>
+              <p className="text-sm text-blue-700 leading-relaxed mb-4">
+                These platforms are handled by the Tom Flips browser extension. Just
+                make sure you&apos;re logged into each marketplace in your browser.
+              </p>
 
-      <div className="bg-blue-50 rounded-xl p-6">
-        <h3 className="font-semibold text-blue-900 mb-2">
-          Chrome Extension Required
-        </h3>
-        <p className="text-sm text-blue-700">
-          Facebook Marketplace, Gumtree, Vinted, Depop, and Poshmark require the
-          Tom Flips Chrome extension for automated listing. Make sure you are
-          signed into each marketplace in your browser before cross-listing.
-          eBay and Etsy connect directly via their official APIs.
-        </p>
-      </div>
+              <div className="flex flex-wrap gap-2 mb-4">
+                {BROWSER_PLATFORMS.map((platform) => (
+                  <span
+                    key={platform.id}
+                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${platform.bgLight} ${platform.textColor}`}
+                  >
+                    <span className={`w-2 h-2 ${platform.color} rounded-full`} />
+                    {platform.name}
+                  </span>
+                ))}
+              </div>
+
+              <button
+                onClick={() => setShowOnboarding(true)}
+                className="text-sm font-medium text-blue-600 hover:text-blue-700 inline-flex items-center gap-1"
+              >
+                View setup guide
+                <ExternalLink className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

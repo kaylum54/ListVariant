@@ -9,10 +9,6 @@ export const authRateLimiter = rateLimit({
   message: { error: 'Too many authentication attempts, please try again later' },
   standardHeaders: true,
   legacyHeaders: false,
-  // Use X-Forwarded-For when behind a proxy, but validate it exists
-  keyGenerator: (req) => {
-    return (req.ip || req.socket.remoteAddress || 'unknown');
-  },
 });
 
 export const apiRateLimiter = rateLimit({
@@ -21,9 +17,6 @@ export const apiRateLimiter = rateLimit({
   message: { error: 'Too many requests, please try again later' },
   standardHeaders: true,
   legacyHeaders: false,
-  keyGenerator: (req) => {
-    return (req.ip || req.socket.remoteAddress || 'unknown');
-  },
 });
 
 // Stricter rate limiter for password-related operations (login, register)
@@ -33,9 +26,6 @@ export const passwordRateLimiter = rateLimit({
   message: { error: 'Too many attempts. Please try again in 15 minutes.' },
   standardHeaders: true,
   legacyHeaders: false,
-  keyGenerator: (req) => {
-    return (req.ip || req.socket.remoteAddress || 'unknown');
-  },
 });
 
 // --- CSRF Protection ---

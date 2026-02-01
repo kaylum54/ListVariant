@@ -1,6 +1,15 @@
 // Content script that runs on the Tom Flips web app
 // Listens for auth token events and forwards them to the extension background
 
+// Inject extension marker for detection by the web app
+(() => {
+  const marker = document.createElement('div');
+  marker.id = 'tom-flips-extension-marker';
+  marker.style.display = 'none';
+  marker.setAttribute('data-version', '1.0.0');
+  document.documentElement.appendChild(marker);
+})();
+
 window.addEventListener('tomflips-auth', ((event: CustomEvent) => {
   const { token, action } = event.detail;
 
