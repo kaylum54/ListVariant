@@ -1,6 +1,8 @@
 import { AutomationFramework, ListingData } from '../lib/automation/AutomationFramework';
+import { SelectorRegistry } from '../lib/selectors/SelectorRegistry';
 import { delay } from '../utils/delay';
 
+// Bundled fallback selectors — used if registry is not initialized
 const SELECTORS = {
   titleInput: [
     'input[name="title"]',
@@ -61,6 +63,15 @@ const SELECTORS = {
   ],
 };
 
+/** Get selectors from registry if available, otherwise use bundled defaults */
+function sel(registry: SelectorRegistry | null, key: keyof typeof SELECTORS): string[] {
+  if (registry) {
+    const fromRegistry = registry.getSelectors('poshmark', key);
+    if (fromRegistry.length > 0) return fromRegistry;
+  }
+  return SELECTORS[key];
+}
+
 class PoshmarkAutomation extends AutomationFramework {
   protected readonly platform = 'poshmark';
   protected readonly createPageUrl = 'https://poshmark.co.uk/create-listing';
@@ -76,7 +87,7 @@ class PoshmarkAutomation extends AutomationFramework {
     if (!images.length) return;
 
     // Poshmark requires a cover photo (first image)
-    const coverInput = await this.waitForAnySelector(SELECTORS.coverPhotoInput) as HTMLInputElement | null;
+    const coverInput = await this.waitForAnySelector(sel(this.registry, 'coverPhotoInput')) as HTMLInputElement | null;
     if (coverInput) {
       // Upload cover photo (first image)
       await this.uploadImageFile(coverInput, [images[0]]);
@@ -85,7 +96,7 @@ class PoshmarkAutomation extends AutomationFramework {
 
       // Upload remaining images
       if (images.length > 1) {
-        const additionalInput = await this.waitForAnySelector(SELECTORS.fileInput) as HTMLInputElement | null;
+        const additionalInput = await this.waitForAnySelector(sel(this.registry, 'fileInput')) as HTMLInputElement | null;
         if (additionalInput && additionalInput !== coverInput) {
           await this.uploadImageFile(additionalInput, images.slice(1));
         } else {
@@ -95,7 +106,7 @@ class PoshmarkAutomation extends AutomationFramework {
       }
     } else {
       // Fallback: single file input
-      const fileInput = await this.waitForAnySelector(SELECTORS.fileInput) as HTMLInputElement | null;
+      const fileInput = await this.waitForAnySelector(sel(this.registry, 'fileInput')) as HTMLInputElement | null;
       if (fileInput) {
         await this.uploadImageFile(fileInput, images);
       } else {
@@ -106,7 +117,7 @@ class PoshmarkAutomation extends AutomationFramework {
 
   protected async fillBasicInfo(data: ListingData): Promise<void> {
     // Title (required field — throw if not found)
-    const titleInput = await this.waitForAnySelector(SELECTORS.titleInput) as HTMLInputElement | null;
+    const titleInput = await this.waitForAnySelector(sel(this.registry, 'titleInput')) as HTMLInputElement | null;
     if (titleInput) {
       await this.typeText(titleInput, data.title);
       await this.humanDelay();
@@ -115,7 +126,7 @@ class PoshmarkAutomation extends AutomationFramework {
     }
 
     // Description
-    const descInput = await this.waitForAnySelector(SELECTORS.descriptionInput) as HTMLTextAreaElement | null;
+    const descInput = await this.waitForAnySelector(sel(this.registry, 'descriptionInput')) as HTMLTextAreaElement | null;
     if (descInput) {
       const desc = this.buildDescription(data);
       await this.typeText(descInput, desc);
@@ -125,7 +136,7 @@ class PoshmarkAutomation extends AutomationFramework {
     }
 
     // Listing price
-    const priceInput = await this.waitForAnySelector(SELECTORS.priceInput) as HTMLInputElement | null;
+    const priceInput = await this.waitForAnySelector(sel(this.registry, 'priceInput')) as HTMLInputElement | null;
     if (priceInput) {
       await this.typeText(priceInput, data.price.toString());
       await this.humanDelay();
@@ -134,7 +145,7 @@ class PoshmarkAutomation extends AutomationFramework {
     }
 
     // Original price (required by Poshmark)
-    const origPriceInput = await this.waitForAnySelector(SELECTORS.originalPriceInput) as HTMLInputElement | null;
+    const origPriceInput = await this.waitForAnySelector(sel(this.registry, 'originalPriceInput')) as HTMLInputElement | null;
     if (origPriceInput) {
       const originalPrice = Math.round(data.price * 1.3); // 30% markup as "original"
       await this.typeText(origPriceInput, originalPrice.toString());
@@ -182,7 +193,7 @@ class PoshmarkAutomation extends AutomationFramework {
   }
 
   private async selectCategory(data: ListingData): Promise<void> {
-    const catBtn = await this.waitForAnySelector(SELECTORS.categoryButton);
+    const catBtn = await this.waitForAnySelector(sel(this.registry, 'categoryButton'));
     if (!catBtn) {
       this.log('Category button not found, skipping');
       return;
@@ -209,7 +220,7 @@ class PoshmarkAutomation extends AutomationFramework {
   }
 
   private async fillBrand(brand: string): Promise<void> {
-    const brandInput = await this.waitForAnySelector(SELECTORS.brandInput) as HTMLInputElement | null;
+    const brandInput = await this.waitForAnySelector(sel(this.registry, 'brandInput')) as HTMLInputElement | null;
     if (brandInput) {
       await this.typeText(brandInput, brand);
       await delay(1000);
@@ -223,7 +234,7 @@ class PoshmarkAutomation extends AutomationFramework {
   }
 
   private async selectSize(): Promise<void> {
-    const sizeBtn = await this.waitForAnySelector(SELECTORS.sizeButton);
+    const sizeBtn = await this.waitForAnySelector(sel(this.registry, 'sizeButton'));
     if (!sizeBtn) return;
 
     (sizeBtn as HTMLElement).click();
@@ -250,7 +261,7 @@ class PoshmarkAutomation extends AutomationFramework {
     };
 
     const target = conditionMap[condition] || 'Good';
-    const btn = await this.waitForAnySelector(SELECTORS.conditionButton);
+    const btn = await this.waitForAnySelector(sel(this.registry, 'conditionButton'));
     if (btn) {
       (btn as HTMLElement).click();
       await delay(500);
@@ -286,10 +297,17 @@ class PoshmarkAutomation extends AutomationFramework {
   }
 }
 
-// --- Message listener ---
+// --- Initialize & Message listener ---
 const automation = new PoshmarkAutomation();
 
 console.log('[TomFlips:poshmark] Content script loaded on:', window.location.href);
+
+// Initialize the selector registry asynchronously
+automation.initRegistry().then((reg) => {
+  console.log(`[TomFlips:poshmark] SelectorRegistry ready v${reg.getVersion()}`);
+}).catch((err) => {
+  console.warn('[TomFlips:poshmark] SelectorRegistry init failed, using bundled defaults:', err);
+});
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   console.log('[TomFlips:poshmark] Message received:', message.type);

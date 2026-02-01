@@ -1,6 +1,8 @@
 import { AutomationFramework, ListingData } from '../lib/automation/AutomationFramework';
+import { SelectorRegistry } from '../lib/selectors/SelectorRegistry';
 import { delay } from '../utils/delay';
 
+// Bundled fallback selectors — used if registry is not initialized
 const SELECTORS = {
   titleInput: [
     'input[name="title"]',
@@ -38,6 +40,15 @@ const SELECTORS = {
   ],
 };
 
+/** Get selectors from registry if available, otherwise use bundled defaults */
+function sel(registry: SelectorRegistry | null, key: keyof typeof SELECTORS): string[] {
+  if (registry) {
+    const fromRegistry = registry.getSelectors('depop', key);
+    if (fromRegistry.length > 0) return fromRegistry;
+  }
+  return SELECTORS[key];
+}
+
 class DepopAutomation extends AutomationFramework {
   protected readonly platform = 'depop';
   protected readonly createPageUrl = 'https://www.depop.com/products/create';
@@ -50,7 +61,7 @@ class DepopAutomation extends AutomationFramework {
   }
 
   protected async uploadImages(images: Array<{ url: string; dataUrl?: string }>): Promise<void> {
-    const fileInput = await this.waitForAnySelector(SELECTORS.fileInput) as HTMLInputElement | null;
+    const fileInput = await this.waitForAnySelector(sel(this.registry, 'fileInput')) as HTMLInputElement | null;
     if (!fileInput) {
       this.error('Could not find file input for image upload');
       return;
@@ -60,7 +71,7 @@ class DepopAutomation extends AutomationFramework {
 
   protected async fillBasicInfo(data: ListingData): Promise<void> {
     // Title (required field — throw if not found)
-    const titleInput = await this.waitForAnySelector(SELECTORS.titleInput) as HTMLInputElement | null;
+    const titleInput = await this.waitForAnySelector(sel(this.registry, 'titleInput')) as HTMLInputElement | null;
     if (titleInput) {
       await this.typeText(titleInput, data.title);
       await this.humanDelay();
@@ -69,7 +80,7 @@ class DepopAutomation extends AutomationFramework {
     }
 
     // Description (Depop uses description prominently — includes hashtags)
-    const descInput = await this.waitForAnySelector(SELECTORS.descriptionInput) as HTMLTextAreaElement | null;
+    const descInput = await this.waitForAnySelector(sel(this.registry, 'descriptionInput')) as HTMLTextAreaElement | null;
     if (descInput) {
       const desc = this.buildDescriptionWithHashtags(data);
       await this.typeText(descInput, desc);
@@ -79,7 +90,7 @@ class DepopAutomation extends AutomationFramework {
     }
 
     // Price
-    const priceInput = await this.waitForAnySelector(SELECTORS.priceInput) as HTMLInputElement | null;
+    const priceInput = await this.waitForAnySelector(sel(this.registry, 'priceInput')) as HTMLInputElement | null;
     if (priceInput) {
       await this.typeText(priceInput, data.price.toString());
       await this.humanDelay();
@@ -107,7 +118,7 @@ class DepopAutomation extends AutomationFramework {
   }
 
   private async selectCategory(data: ListingData): Promise<void> {
-    const catBtn = await this.waitForAnySelector(SELECTORS.categoryButton);
+    const catBtn = await this.waitForAnySelector(sel(this.registry, 'categoryButton'));
     if (!catBtn) {
       this.log('Category button not found, skipping');
       return;
@@ -143,7 +154,7 @@ class DepopAutomation extends AutomationFramework {
     };
 
     const target = conditionMap[condition] || 'Good';
-    const btn = await this.waitForAnySelector(SELECTORS.conditionButton);
+    const btn = await this.waitForAnySelector(sel(this.registry, 'conditionButton'));
     if (btn) {
       (btn as HTMLElement).click();
       await delay(500);
@@ -198,10 +209,17 @@ class DepopAutomation extends AutomationFramework {
   }
 }
 
-// --- Message listener ---
+// --- Initialize & Message listener ---
 const automation = new DepopAutomation();
 
 console.log('[TomFlips:depop] Content script loaded on:', window.location.href);
+
+// Initialize the selector registry asynchronously
+automation.initRegistry().then((reg) => {
+  console.log(`[TomFlips:depop] SelectorRegistry ready v${reg.getVersion()}`);
+}).catch((err) => {
+  console.warn('[TomFlips:depop] SelectorRegistry init failed, using bundled defaults:', err);
+});
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   console.log('[TomFlips:depop] Message received:', message.type);

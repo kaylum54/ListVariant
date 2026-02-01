@@ -1,5 +1,6 @@
 import { delay, randomDelay } from '../../utils/delay';
 import { waitForElement } from '../../utils/dom';
+import { SelectorRegistry } from '../selectors/SelectorRegistry';
 
 export interface ListingData {
   id: string;
@@ -20,6 +21,7 @@ export interface ListingData {
 export abstract class AutomationFramework {
   protected abstract readonly platform: string;
   protected abstract readonly createPageUrl: string;
+  protected registry: SelectorRegistry | null = null;
 
   // Template method — orchestrates the full listing flow
   async createListing(data: ListingData): Promise<{ success: boolean; error?: string }> {
@@ -96,20 +98,35 @@ export abstract class AutomationFramework {
   }
 
   protected async waitForAnySelector(selectors: string[], timeout = 5000): Promise<Element | null> {
-    for (const selector of selectors) {
-      const el = document.querySelector(selector);
-      if (el) return el;
+    for (let i = 0; i < selectors.length; i++) {
+      const el = document.querySelector(selectors[i]);
+      if (el) {
+        console.log(`[TomFlips:${this.platform}] Selector matched [${i}]: ${selectors[i]}`);
+        return el;
+      }
     }
     // Poll if nothing found immediately
     const deadline = Date.now() + timeout;
     while (Date.now() < deadline) {
-      for (const selector of selectors) {
-        const el = document.querySelector(selector);
-        if (el) return el;
+      for (let i = 0; i < selectors.length; i++) {
+        const el = document.querySelector(selectors[i]);
+        if (el) {
+          console.log(`[TomFlips:${this.platform}] Selector matched [${i}]: ${selectors[i]}`);
+          return el;
+        }
       }
       await delay(200);
     }
     return null;
+  }
+
+  /**
+   * Initialize the SelectorRegistry for this framework instance.
+   * Call this early in content script setup.
+   */
+  async initRegistry(): Promise<SelectorRegistry> {
+    this.registry = await SelectorRegistry.init();
+    return this.registry;
   }
 
   protected async typeText(element: HTMLInputElement | HTMLTextAreaElement, text: string): Promise<void> {

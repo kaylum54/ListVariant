@@ -1,5 +1,96 @@
 import { delay, randomDelay } from '../utils/delay';
 import { waitForElement } from '../utils/dom';
+import { SelectorRegistry } from '../lib/selectors/SelectorRegistry';
+
+// Bundled fallback selectors — used if registry is not initialized
+const SELECTORS = {
+  titleInput: [
+    'input[name="title"]',
+    '[data-testid="title-input"]',
+    'input[aria-label*="title" i]',
+    'input[placeholder*="title" i]',
+    '#title',
+  ],
+  priceInput: [
+    'input[name="price"]',
+    '[data-testid="price-input"]',
+    'input[aria-label*="price" i]',
+    'input[placeholder*="price" i]',
+    '#price',
+  ],
+  descriptionInput: [
+    'textarea[name="description"]',
+    '[data-testid="description-input"]',
+    'textarea[aria-label*="description" i]',
+    'textarea[placeholder*="description" i]',
+    '#description',
+  ],
+  postcodeInput: [
+    'input[name="postcode"]',
+    '[data-testid="postcode-input"]',
+    'input[aria-label*="postcode" i]',
+    'input[placeholder*="postcode" i]',
+    '#postcode',
+  ],
+  categoryOption: [
+    '[data-testid="category-option"]',
+    '.category-item',
+    '[role="option"]',
+    '[role="menuitem"]',
+  ],
+  fileInput: [
+    'input[type="file"][accept*="image"]',
+    'input[type="file"]',
+    '[data-testid="image-upload"]',
+  ],
+};
+
+let registry: SelectorRegistry | null = null;
+
+/** Get selectors from registry if available, otherwise use bundled defaults */
+function sel(key: keyof typeof SELECTORS): string[] {
+  if (registry) {
+    const fromRegistry = registry.getSelectors('gumtree', key);
+    if (fromRegistry.length > 0) return fromRegistry;
+  }
+  return SELECTORS[key];
+}
+
+/**
+ * Try each selector in a fallback array via waitForElement.
+ * Returns the first element found, or null.
+ */
+async function waitForAnySelector(selectors: string[], timeout = 5000): Promise<Element | null> {
+  // Immediate check
+  for (let i = 0; i < selectors.length; i++) {
+    const el = document.querySelector(selectors[i]);
+    if (el) {
+      console.log(`[TomFlips:gumtree] Selector matched [${i}]: ${selectors[i]}`);
+      return el;
+    }
+  }
+  // Poll if nothing found immediately
+  const deadline = Date.now() + timeout;
+  while (Date.now() < deadline) {
+    for (let i = 0; i < selectors.length; i++) {
+      const el = document.querySelector(selectors[i]);
+      if (el) {
+        console.log(`[TomFlips:gumtree] Selector matched [${i}]: ${selectors[i]}`);
+        return el;
+      }
+    }
+    await delay(200);
+  }
+  return null;
+}
+
+// Initialize the selector registry
+SelectorRegistry.init().then((reg) => {
+  registry = reg;
+  console.log(`[TomFlips:gumtree] SelectorRegistry ready v${reg.getVersion()}`);
+}).catch((err) => {
+  console.warn('[TomFlips:gumtree] SelectorRegistry init failed, using bundled defaults:', err);
+});
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'CREATE_LISTING') {
@@ -21,17 +112,17 @@ async function createListing(listing: any) {
 
     await delay(2000);
 
-    await fillField('input[name="title"]', listing.title);
+    await fillField(sel('titleInput'), listing.title);
     await delay(randomDelay(500, 1000));
 
     await selectCategory(listing);
     await delay(randomDelay(1000, 1500));
 
-    await fillField('input[name="price"]', listing.price.toString());
+    await fillField(sel('priceInput'), listing.price.toString());
     await delay(randomDelay(500, 1000));
 
     await fillField(
-      'textarea[name="description"]',
+      sel('descriptionInput'),
       buildDescription(listing)
     );
     await delay(randomDelay(500, 1000));
@@ -42,7 +133,7 @@ async function createListing(listing: any) {
     }
 
     await fillField(
-      'input[name="postcode"]',
+      sel('postcodeInput'),
       listing.postcode || 'SW1A 1AA'
     );
     await delay(randomDelay(500, 1000));
@@ -68,11 +159,11 @@ async function createListing(listing: any) {
   }
 }
 
-async function fillField(selector: string, value: string) {
-  const element = (await waitForElement(selector, 5000)) as
+async function fillField(selectors: string[], value: string) {
+  const element = await waitForAnySelector(selectors) as
     | HTMLInputElement
     | HTMLTextAreaElement;
-  if (!element) throw new Error(`Could not find element: ${selector}`);
+  if (!element) throw new Error(`Could not find element for selectors: ${selectors.join(', ')}`);
 
   element.focus();
   element.value = value;
@@ -84,9 +175,8 @@ async function selectCategory(_listing: any) {
   const categoryPath = ['For Sale', 'Home & Garden', 'Sofas & Armchairs'];
 
   for (const category of categoryPath) {
-    const options = document.querySelectorAll(
-      '[data-testid="category-option"], .category-item'
-    );
+    const categorySelectors = sel('categoryOption');
+    const options = document.querySelectorAll(categorySelectors.join(', '));
     for (const option of options) {
       if (option.textContent?.includes(category)) {
         (option as HTMLElement).click();
@@ -98,10 +188,7 @@ async function selectCategory(_listing: any) {
 }
 
 async function uploadImages(images: Array<{ url: string; dataUrl?: string }>) {
-  const fileInput = (await waitForElement(
-    'input[type="file"]',
-    5000
-  )) as HTMLInputElement;
+  const fileInput = await waitForAnySelector(sel('fileInput')) as HTMLInputElement;
   if (!fileInput) throw new Error('Could not find image upload input');
 
   for (const image of images.slice(0, 10)) {

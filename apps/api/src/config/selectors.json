@@ -1,0 +1,206 @@
+{
+  "version": "1.0.0",
+  "updatedAt": "2026-01-31",
+  "platforms": {
+    "vinted": {
+      "platform": "vinted",
+      "version": "1.0.0",
+      "updatedAt": "2026-01-31",
+      "selectors": {
+        "titleInput": [
+          { "css": "input[name=\"title\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Primary name attribute selector" },
+          { "css": "[data-testid=\"title-input\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Test ID fallback" },
+          { "css": "input[aria-label*=\"title\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Accessibility label fallback" },
+          { "css": "input[placeholder*=\"title\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Placeholder text fallback" }
+        ],
+        "descriptionInput": [
+          { "css": "textarea[name=\"description\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Primary name attribute selector" },
+          { "css": "[data-testid=\"description-input\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Test ID fallback" },
+          { "css": "textarea[aria-label*=\"description\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Accessibility label fallback" },
+          { "css": "textarea[placeholder*=\"description\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Placeholder text fallback" }
+        ],
+        "priceInput": [
+          { "css": "input[name=\"price\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Primary name attribute selector" },
+          { "css": "[data-testid=\"price-input\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Test ID fallback" },
+          { "css": "input[aria-label*=\"price\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Accessibility label fallback" },
+          { "css": "input[placeholder*=\"price\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Placeholder text fallback" }
+        ],
+        "categoryButton": [
+          { "css": "[data-testid=\"category-select\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Test ID selector" },
+          { "css": "button[aria-label*=\"category\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Accessibility label fallback" },
+          { "css": "[data-testid=\"catalog-select\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Alternate test ID" }
+        ],
+        "brandInput": [
+          { "css": "input[name=\"brand\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Primary name attribute selector" },
+          { "css": "[data-testid=\"brand-input\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Test ID fallback" },
+          { "css": "input[aria-label*=\"brand\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Accessibility label fallback" },
+          { "css": "input[placeholder*=\"brand\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Placeholder text fallback" }
+        ],
+        "conditionSelect": [
+          { "css": "[data-testid=\"condition-select\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Test ID selector" },
+          { "css": "button[aria-label*=\"condition\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Accessibility label fallback" },
+          { "css": "select[name=\"status\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Legacy select fallback" }
+        ],
+        "colorSelect": [
+          { "css": "[data-testid=\"color-select\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Test ID selector" },
+          { "css": "button[aria-label*=\"colo\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Accessibility label fallback (partial match for color/colour)" }
+        ],
+        "fileInput": [
+          { "css": "input[type=\"file\"][accept*=\"image\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "File input with image accept" },
+          { "css": "input[type=\"file\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Generic file input fallback" }
+        ]
+      }
+    },
+    "depop": {
+      "platform": "depop",
+      "version": "1.0.0",
+      "updatedAt": "2026-01-31",
+      "selectors": {
+        "titleInput": [
+          { "css": "input[name=\"title\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Primary name attribute selector" },
+          { "css": "[data-testid=\"title\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Test ID fallback" },
+          { "css": "input[aria-label*=\"title\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Accessibility label fallback" },
+          { "css": "input[placeholder*=\"describe\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Depop-specific placeholder fallback" },
+          { "css": "input[placeholder*=\"title\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Placeholder text fallback" }
+        ],
+        "descriptionInput": [
+          { "css": "textarea[name=\"description\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Primary name attribute selector" },
+          { "css": "[data-testid=\"description\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Test ID fallback" },
+          { "css": "textarea[aria-label*=\"description\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Accessibility label fallback" },
+          { "css": "textarea[placeholder*=\"describe\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Placeholder text fallback" }
+        ],
+        "priceInput": [
+          { "css": "input[name=\"price\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Primary name attribute selector" },
+          { "css": "[data-testid=\"price\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Test ID fallback" },
+          { "css": "input[aria-label*=\"price\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Accessibility label fallback" },
+          { "css": "input[placeholder*=\"price\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Placeholder text fallback" },
+          { "css": "input[type=\"number\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Numeric input fallback" }
+        ],
+        "categoryButton": [
+          { "css": "button[aria-label*=\"category\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Accessibility label selector" },
+          { "css": "[data-testid=\"category-select\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Test ID fallback" },
+          { "css": "[data-testid=\"category\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Short test ID fallback" }
+        ],
+        "conditionButton": [
+          { "css": "button[aria-label*=\"condition\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Accessibility label selector" },
+          { "css": "[data-testid=\"condition\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Test ID fallback" },
+          { "css": "[data-testid=\"condition-select\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Alt test ID fallback" }
+        ],
+        "fileInput": [
+          { "css": "input[type=\"file\"][accept*=\"image\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "File input with image accept" },
+          { "css": "input[type=\"file\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Generic file input fallback" }
+        ]
+      }
+    },
+    "poshmark": {
+      "platform": "poshmark",
+      "version": "1.0.0",
+      "updatedAt": "2026-01-31",
+      "selectors": {
+        "titleInput": [
+          { "css": "input[name=\"title\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Primary name attribute selector" },
+          { "css": "[data-testid=\"title-input\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Test ID fallback" },
+          { "css": "input[aria-label*=\"title\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Accessibility label fallback" },
+          { "css": "input[placeholder*=\"title\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Placeholder text fallback" },
+          { "css": "#title", "version": "v1", "addedAt": "2026-01-31", "notes": "ID selector fallback" }
+        ],
+        "descriptionInput": [
+          { "css": "textarea[name=\"description\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Primary name attribute selector" },
+          { "css": "[data-testid=\"description-input\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Test ID fallback" },
+          { "css": "textarea[aria-label*=\"description\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Accessibility label fallback" },
+          { "css": "textarea[placeholder*=\"description\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Placeholder text fallback" },
+          { "css": "#description", "version": "v1", "addedAt": "2026-01-31", "notes": "ID selector fallback" }
+        ],
+        "priceInput": [
+          { "css": "input[name=\"price\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Primary name attribute selector" },
+          { "css": "input[name=\"listingPrice\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Poshmark-specific name" },
+          { "css": "[data-testid=\"price-input\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Test ID fallback" },
+          { "css": "input[aria-label*=\"listing price\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Accessibility label fallback" },
+          { "css": "input[placeholder*=\"listing price\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Placeholder text fallback" }
+        ],
+        "originalPriceInput": [
+          { "css": "input[name=\"originalPrice\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Primary name attribute selector" },
+          { "css": "[data-testid=\"original-price-input\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Test ID fallback" },
+          { "css": "input[aria-label*=\"original\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Accessibility label fallback" },
+          { "css": "input[placeholder*=\"original\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Placeholder text fallback" }
+        ],
+        "categoryButton": [
+          { "css": "button[aria-label*=\"category\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Accessibility label selector" },
+          { "css": "[data-testid=\"category-select\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Test ID fallback" },
+          { "css": "[data-testid=\"category\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Short test ID fallback" },
+          { "css": ".category-select", "version": "v1", "addedAt": "2026-01-31", "notes": "Class selector fallback" }
+        ],
+        "brandInput": [
+          { "css": "input[name=\"brand\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Primary name attribute selector" },
+          { "css": "[data-testid=\"brand-input\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Test ID fallback" },
+          { "css": "input[aria-label*=\"brand\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Accessibility label fallback" },
+          { "css": "input[placeholder*=\"brand\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Placeholder text fallback" }
+        ],
+        "sizeButton": [
+          { "css": "button[aria-label*=\"size\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Accessibility label selector" },
+          { "css": "[data-testid=\"size-select\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Test ID fallback" },
+          { "css": "[data-testid=\"size\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Short test ID fallback" }
+        ],
+        "conditionButton": [
+          { "css": "button[aria-label*=\"condition\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Accessibility label selector" },
+          { "css": "[data-testid=\"condition-select\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Test ID fallback" }
+        ],
+        "coverPhotoInput": [
+          { "css": "input[type=\"file\"][data-testid=\"cover-photo\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Poshmark cover photo input" },
+          { "css": "input[type=\"file\"][accept*=\"image\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "File input with image accept" },
+          { "css": "input[type=\"file\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Generic file input fallback" }
+        ],
+        "fileInput": [
+          { "css": "input[type=\"file\"][accept*=\"image\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "File input with image accept" },
+          { "css": "input[type=\"file\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Generic file input fallback" }
+        ]
+      }
+    },
+    "gumtree": {
+      "platform": "gumtree",
+      "version": "1.0.0",
+      "updatedAt": "2026-01-31",
+      "selectors": {
+        "titleInput": [
+          { "css": "input[name=\"title\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Primary name attribute selector" },
+          { "css": "[data-testid=\"title-input\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Test ID fallback" },
+          { "css": "input[aria-label*=\"title\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Accessibility label fallback" },
+          { "css": "input[placeholder*=\"title\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Placeholder text fallback" },
+          { "css": "#title", "version": "v1", "addedAt": "2026-01-31", "notes": "ID selector fallback" }
+        ],
+        "priceInput": [
+          { "css": "input[name=\"price\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Primary name attribute selector" },
+          { "css": "[data-testid=\"price-input\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Test ID fallback" },
+          { "css": "input[aria-label*=\"price\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Accessibility label fallback" },
+          { "css": "input[placeholder*=\"price\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Placeholder text fallback" },
+          { "css": "#price", "version": "v1", "addedAt": "2026-01-31", "notes": "ID selector fallback" }
+        ],
+        "descriptionInput": [
+          { "css": "textarea[name=\"description\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Primary name attribute selector" },
+          { "css": "[data-testid=\"description-input\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Test ID fallback" },
+          { "css": "textarea[aria-label*=\"description\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Accessibility label fallback" },
+          { "css": "textarea[placeholder*=\"description\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Placeholder text fallback" },
+          { "css": "#description", "version": "v1", "addedAt": "2026-01-31", "notes": "ID selector fallback" }
+        ],
+        "postcodeInput": [
+          { "css": "input[name=\"postcode\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Primary name attribute selector" },
+          { "css": "[data-testid=\"postcode-input\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Test ID fallback" },
+          { "css": "input[aria-label*=\"postcode\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Accessibility label fallback" },
+          { "css": "input[placeholder*=\"postcode\" i]", "version": "v1", "addedAt": "2026-01-31", "notes": "Placeholder text fallback" },
+          { "css": "#postcode", "version": "v1", "addedAt": "2026-01-31", "notes": "ID selector fallback" }
+        ],
+        "categoryOption": [
+          { "css": "[data-testid=\"category-option\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Test ID selector" },
+          { "css": ".category-item", "version": "v1", "addedAt": "2026-01-31", "notes": "Class selector fallback" },
+          { "css": "[role=\"option\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "ARIA role fallback" },
+          { "css": "[role=\"menuitem\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Menu item role fallback" }
+        ],
+        "fileInput": [
+          { "css": "input[type=\"file\"][accept*=\"image\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "File input with image accept" },
+          { "css": "input[type=\"file\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Generic file input fallback" },
+          { "css": "[data-testid=\"image-upload\"]", "version": "v1", "addedAt": "2026-01-31", "notes": "Test ID fallback" }
+        ]
+      }
+    }
+  }
+}

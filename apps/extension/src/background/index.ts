@@ -1,7 +1,195 @@
 import { Storage } from '../lib/storage';
 import { API } from '../lib/api';
 
-// Message handlers
+const SELECTOR_CONFIG_STORAGE_KEY = 'tomflips_selector_config';
+const SELECTOR_HEALTH_STORAGE_KEY = 'tomflips_selector_health';
+const API_BASE = 'http://localhost:4000';
+
+// ─── Selector Config Refresh ────────────────────────────────────────────────
+
+async function refreshSelectorConfig(): Promise<void> {
+  console.log('[TomFlips BG] Refreshing selector config from API...');
+  try {
+    // Check current cached version to avoid unnecessary downloads
+    const cached = await new Promise<any>((resolve) => {
+      chrome.storage.local.get([SELECTOR_CONFIG_STORAGE_KEY], (result) => {
+        resolve(result[SELECTOR_CONFIG_STORAGE_KEY] || null);
+      });
+    });
+
+    const vParam = cached?.version ? `?v=${encodeURIComponent(cached.version)}` : '';
+    const response = await fetch(`${API_BASE}/api/config/selectors${vParam}`);
+
+    if (response.status === 304) {
+      console.log('[TomFlips BG] Selector config is up to date');
+      return;
+    }
+
+    if (!response.ok) {
+      console.warn(`[TomFlips BG] Selector config fetch failed: HTTP ${response.status}`);
+      return;
+    }
+
+    const config = await response.json();
+    if (config?.version && config?.platforms) {
+      await new Promise<void>((resolve) => {
+        chrome.storage.local.set({ [SELECTOR_CONFIG_STORAGE_KEY]: config }, () => {
+          console.log(`[TomFlips BG] Selector config cached: v${config.version}`);
+          resolve();
+        });
+      });
+    }
+  } catch (err: any) {
+    console.warn('[TomFlips BG] Selector config refresh failed:', err?.message || err);
+  }
+}
+
+// ─── Health Check System ────────────────────────────────────────────────────
+
+const PLATFORM_URLS: Record<string, string> = {
+  vinted: 'https://www.vinted.co.uk/items/new',
+  depop: 'https://www.depop.com/products/create',
+  poshmark: 'https://poshmark.co.uk/create-listing',
+  gumtree: 'https://www.gumtree.com/post-ad',
+};
+
+async function runHealthChecks(): Promise<void> {
+  console.log('[TomFlips BG] Running selector health checks...');
+  try {
+    const cached = await new Promise<any>((resolve) => {
+      chrome.storage.local.get([SELECTOR_CONFIG_STORAGE_KEY], (result) => {
+        resolve(result[SELECTOR_CONFIG_STORAGE_KEY] || null);
+      });
+    });
+
+    if (!cached?.platforms) {
+      console.warn('[TomFlips BG] No selector config cached, skipping health check');
+      return;
+    }
+
+    const results: Record<string, any> = {};
+
+    for (const [platform, url] of Object.entries(PLATFORM_URLS)) {
+      if (!cached.platforms[platform]) continue;
+
+      try {
+        // Open a background tab for the health check
+        const tab = await chrome.tabs.create({ url: url as string, active: false });
+        if (!tab.id) continue;
+
+        const tabId = tab.id;
+
+        // Wait for tab to load
+        await new Promise<void>((resolve) => {
+          const onUpdated = (updatedId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
+            if (updatedId === tabId && changeInfo.status === 'complete') {
+              chrome.tabs.onUpdated.removeListener(onUpdated);
+              resolve();
+            }
+          };
+          chrome.tabs.onUpdated.addListener(onUpdated);
+          // Timeout after 15s
+          setTimeout(() => {
+            chrome.tabs.onUpdated.removeListener(onUpdated);
+            resolve();
+          }, 15000);
+        });
+
+        // Wait for page JS to render
+        await new Promise((r) => setTimeout(r, 3000));
+
+        // Build and inject probe script
+        const selectorsJson = JSON.stringify(cached.platforms[platform].selectors);
+        const probeScript = `
+          (function() {
+            const selectors = ${selectorsJson};
+            const results = {};
+            let totalKeys = 0;
+            let foundKeys = 0;
+            for (const [key, versions] of Object.entries(selectors)) {
+              totalKeys++;
+              let found = false;
+              let matchedIndex = -1;
+              let matchedVersion = null;
+              for (let i = 0; i < versions.length; i++) {
+                try {
+                  const el = document.querySelector(versions[i].css);
+                  if (el) { found = true; matchedIndex = i; matchedVersion = versions[i].version; break; }
+                } catch (e) {}
+              }
+              if (found) foundKeys++;
+              results[key] = { found, matchedIndex, matchedVersion };
+            }
+            const ratio = totalKeys > 0 ? foundKeys / totalKeys : 0;
+            let overallStatus = 'broken';
+            if (ratio > 0.8) overallStatus = 'healthy';
+            else if (ratio >= 0.5) overallStatus = 'degraded';
+            return { platform: '${platform}', timestamp: new Date().toISOString(), results, overallStatus };
+          })();
+        `;
+
+        const execResults = await chrome.scripting.executeScript({
+          target: { tabId },
+          func: (script: string) => eval(script),
+          args: [probeScript],
+        });
+
+        if (execResults?.[0]?.result) {
+          results[platform] = execResults[0].result;
+          console.log(`[TomFlips BG] Health check ${platform}: ${execResults[0].result.overallStatus}`);
+        }
+
+        // Close the tab
+        await chrome.tabs.remove(tabId);
+      } catch (err: any) {
+        console.warn(`[TomFlips BG] Health check failed for ${platform}:`, err?.message || err);
+        results[platform] = {
+          platform,
+          timestamp: new Date().toISOString(),
+          results: {},
+          overallStatus: 'broken',
+        };
+      }
+    }
+
+    // Store health check results
+    await new Promise<void>((resolve) => {
+      chrome.storage.local.set({ [SELECTOR_HEALTH_STORAGE_KEY]: results }, () => {
+        console.log('[TomFlips BG] Health check results stored');
+        resolve();
+      });
+    });
+  } catch (err: any) {
+    console.warn('[TomFlips BG] Health checks failed:', err?.message || err);
+  }
+}
+
+// ─── Alarms Setup ───────────────────────────────────────────────────────────
+
+chrome.runtime.onInstalled.addListener(() => {
+  // Refresh selector config every 2 hours
+  chrome.alarms.create('refreshSelectors', { periodInMinutes: 120 });
+  // Run health checks every 6 hours
+  chrome.alarms.create('healthCheck', { periodInMinutes: 360 });
+  // Initial fetch on install
+  refreshSelectorConfig();
+});
+
+// Also refresh on startup (service worker wake)
+chrome.runtime.onStartup.addListener(() => {
+  refreshSelectorConfig();
+});
+
+chrome.alarms.onAlarm.addListener((alarm) => {
+  if (alarm.name === 'refreshSelectors') {
+    refreshSelectorConfig();
+  } else if (alarm.name === 'healthCheck') {
+    runHealthChecks();
+  }
+});
+
+// ─── Message handlers ───────────────────────────────────────────────────────
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   handleMessage(message, sender)
     .then(sendResponse)
@@ -39,6 +227,10 @@ async function handleMessage(
       );
     case 'CROSS_LIST':
       return crossList(message.listing, message.marketplace);
+    case 'GET_SELECTOR_CONFIG':
+      return getSelectorConfig();
+    case 'GET_SELECTOR_HEALTH':
+      return getSelectorHealth();
     default:
       return { error: 'Unknown message type' };
   }
@@ -83,7 +275,21 @@ async function reportListingStatus(
   return API.reportListingStatus(token, listingId, marketplace, status);
 }
 
-const API_BASE = 'http://localhost:4000';
+async function getSelectorConfig() {
+  return new Promise((resolve) => {
+    chrome.storage.local.get([SELECTOR_CONFIG_STORAGE_KEY], (result) => {
+      resolve(result[SELECTOR_CONFIG_STORAGE_KEY] || null);
+    });
+  });
+}
+
+async function getSelectorHealth() {
+  return new Promise((resolve) => {
+    chrome.storage.local.get([SELECTOR_HEALTH_STORAGE_KEY], (result) => {
+      resolve(result[SELECTOR_HEALTH_STORAGE_KEY] || null);
+    });
+  });
+}
 
 async function crossList(listing: any, marketplace: string) {
   console.log('[TomFlips BG] crossList called for', marketplace, 'listing:', listing.id);
